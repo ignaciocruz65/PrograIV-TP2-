@@ -1,0 +1,110 @@
+<div class="auth-shell d-flex align-items-center justify-content-center">
+  <div class="glass-card auth-card-wide p-5 w-100 shadow-lg">
+    <div class="text-center mb-4">
+      <i class="bi bi-person-plus display-1 text-primary mb-3"></i>
+      <h1 class="h2 fw-bold text-gradient">Crear Cuenta</h1>
+      <p class="auth-subtitle">Únete a nuestra comunidad de Red Social</p>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="enviar()">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Nombre</label>
+          <input type="text" maxlength="20" formControlName="nombre" class="form-control glass-input" placeholder="Juan" [class.is-invalid]="invalido('nombre')">
+          @if (formulario.controls.nombre.invalid && (formulario.controls.nombre.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Solo se permiten letras y un máximo de 20 caracteres.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Apellido</label>
+          <input type="text" maxlength="20" formControlName="apellido" class="form-control glass-input" placeholder="Pérez" [class.is-invalid]="invalido('apellido')">
+          @if (formulario.controls.apellido.invalid && (formulario.controls.apellido.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Solo se permiten letras y un máximo de 20 caracteres.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Correo Electrónico</label>
+          <input type="email" maxlength="50" formControlName="correo" class="form-control glass-input" placeholder="juan@ejemplo.com" [class.is-invalid]="invalido('correo')">
+          @if (formulario.controls.correo.invalid && (formulario.controls.correo.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Ingrese un correo electrónico válido y un máximo de 50 caracteres.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Nombre de Usuario</label>
+          <input type="text" maxlength="25" formControlName="nombreUsuario" class="form-control glass-input" placeholder="juanperez123" [class.is-invalid]="invalido('nombreUsuario')">
+          @if (formulario.controls.nombreUsuario.invalid && (formulario.controls.nombreUsuario.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Solo se permiten letras, números y guiones bajos.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Contraseña</label>
+          <input type="password" maxlength="20" formControlName="password" class="form-control glass-input" placeholder="••••••••" [class.is-invalid]="invalido('password')">
+          @if (formulario.controls.password.invalid && (formulario.controls.password.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Mínimo 8 caracteres, una mayúscula y un número.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Repetir Contraseña</label>
+          <input
+            type="password"
+            maxlength="20"
+            formControlName="repetirPassword"
+            class="form-control glass-input"
+            placeholder="••••••••"
+            [class.is-invalid]="invalido('repetirPassword') || (formulario.controls.repetirPassword.touched && formulario.controls.password.value !== formulario.controls.repetirPassword.value)"
+          >
+          @if (formulario.controls.repetirPassword.invalid && (formulario.controls.repetirPassword.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Este campo es obligatorio.</small>
+          }
+          @if (formulario.controls.repetirPassword.valid && formulario.controls.password.value !== formulario.controls.repetirPassword.value && (formulario.controls.repetirPassword.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Las contraseñas no coinciden.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Fecha de Nacimiento</label>
+          <input type="date" formControlName="fechaNacimiento" class="form-control glass-input" [class.is-invalid]="invalido('fechaNacimiento')">
+          @if (formulario.controls.fechaNacimiento.errors?.['required'] && (formulario.controls.fechaNacimiento.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">Por favor, seleccione su fecha de nacimiento.</small>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small text-uppercase fw-bold">Foto de Perfil</label>
+          <input type="file" (change)="alSeleccionarArchivo($event)" class="form-control glass-input" accept="image/*">
+          @if (archivoSeleccionado()) {
+            <small class="text-success mt-2 d-block"><i class="bi bi-check-circle"></i> Imagen lista</small>
+          }
+        </div>
+
+        <div class="col-12">
+          <label class="form-label small text-uppercase fw-bold">Breve Descripción</label>
+          <textarea maxlength="200" formControlName="descripcionBreve" class="form-control glass-input" rows="3" placeholder="Cuéntanos un poco sobre ti..."></textarea>
+          @if (formulario.controls.descripcionBreve.invalid && (formulario.controls.descripcionBreve.touched || formularioEnviado())) {
+            <small class="text-danger mt-2 d-block">La descripción es obligatoria y debe tener un máximo de 200 caracteres.</small>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-arcade btn-arcade-primary w-100 py-3 my-4 shadow-sm" [disabled]="cargando()">
+        @if (cargando()) {
+          <span class="spinner-border spinner-border-sm me-2"></span> Registrando...
+        } @else {
+          Crear Cuenta Ahora
+        }
+      </button>
+
+      <div class="text-center">
+        <p class="mb-0 small opacity-75">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login" class="text-primary fw-bold text-decoration-none">Inicia Sesión</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="page-shell">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="section-heading text-center">
+        <h1 class="text-gradient">Muro Global</h1>
+        <p>Mira lo que otros están compartiendo</p>
+      </div>
+
+      <div class="glass-card p-4 mb-5 shadow-lg">
+        <div class="feed-composer d-flex flex-column flex-sm-row align-items-center gap-3">
+          <img
+            [src]="servicioAuth.usuarioActual()?.imagenPerfilUrl || 'https://ui-avatars.com/api/?name=' + servicioAuth.usuarioActual()?.nombre"
+            class="avatar-md rounded-circle border border-2 border-primary"
+            alt="Foto de perfil"
+          >
+          <input type="text" class="form-control glass-input flex-grow-1" placeholder="¿Qué estás pensando, {{ servicioAuth.usuarioActual()?.nombre }}?">
+          <button class="btn btn-arcade btn-arcade-primary py-2 px-4">Postear</button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12">
+          <article class="glass-card p-4 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+              <img src="https://ui-avatars.com/api/?name=Admin" class="avatar-md rounded-circle me-3 border border-2 border-white" alt="Administrador">
+              <div>
+                <h2 class="h6 mb-0 text-gradient">Administrador</h2>
+                <small class="text-muted">Hace 2 horas</small>
+              </div>
+            </div>
+
+            <h3 class="h5 fw-bold mb-2">¡Bienvenidos!</h3>
+            <p class="text-secondary mb-0">Home works!</p>
+
+            <div class="d-flex flex-wrap gap-2 mt-3 pt-3 border-top border-white-50">
+              <span class="interactive-soft small"><i class="bi bi-heart me-1"></i> 12 Me gusta</span>
+              <span class="interactive-soft small"><i class="bi bi-chat me-1"></i> 0 Comentarios</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
