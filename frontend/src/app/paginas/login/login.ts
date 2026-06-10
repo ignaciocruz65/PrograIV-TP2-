@@ -25,8 +25,8 @@ export class Login {
 
   // forms reactive para login
   formulario = this.fb.nonNullable.group({
-    usuarioOCorreo: ['', [Validators.required, Validators.minLength(3)]],
-    contrasena: ['', [Validators.required, Validators.pattern(patronContrasena)]],
+    usuarioOCorreo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+    contrasena: ['', [Validators.required, Validators.pattern(patronContrasena), Validators.maxLength(20), Validators.minLength(8)]],
   });
 
   // envia el formulario

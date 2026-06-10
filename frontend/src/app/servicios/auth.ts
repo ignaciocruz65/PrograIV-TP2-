@@ -15,7 +15,6 @@ export type UsuarioPublico = {
   createdAt: string;
 };
 
-// Interfaz para la respuesta de NestJS (Usuario + Token JWT)
 export interface AuthResponse {
   usuario: UsuarioPublico;
   token: string;
@@ -35,32 +34,29 @@ export class AuthService {
   usuarioActual = signal<UsuarioPublico | null>(null);
 
   constructor() {
-    // Al recargar la página, verificamos si ya estaba logueado
     const userJson = localStorage.getItem('');
     if (userJson) {
       this.usuarioActual.set(JSON.parse(userJson));
     }
   }
 
-  // Usamos Promesas nativas y el .subscribe() que ya dominás
   login(usuarioOCorreo: string, password: string): Promise<UsuarioPublico> {
     return new Promise((resolve, reject) => {
       this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, { usuarioOCorreo, password })
         .subscribe({
           next: (response) => {
-            // 1. Guardamos el usuario en la señal
             this.usuarioActual.set(response.usuario);
             
-            // 2. Guardamos datos y TOKEN en el navegador (Requisito del TP)
+            // guardado de token y datos en el navegador
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             localStorage.setItem('token', response.token); 
             
-            // 3. Resolvemos la promesa indicando que todo salió bien
+            
             resolve(response.usuario);
           },
           error: (err) => {
             console.error('Error en el login:', err);
-            reject(err); // Rechazamos la promesa si falla (ej: mala contraseña)
+            reject(err);
           }
         });
     });

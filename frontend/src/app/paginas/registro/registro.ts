@@ -69,7 +69,6 @@ export class Registro {
 
     this.cargando.set(true);
 
-    // 5. Preparación del paquete de datos (FormData) para NestJS
     const formData = new FormData();
     
     Object.keys(valores).forEach(llave => {
@@ -89,7 +88,7 @@ export class Registro {
         title: '¡Registro Exitoso!',
         text: 'Tu cuenta ha sido creada. Ya puedes iniciar sesión.',
         confirmButtonText: 'Ir al Login',
-        confirmButtonColor: '#198754', // Verde success de tu paleta
+        confirmButtonColor: '#198754', 
         background: '#0a0f1e',
         color: '#fff'
       }).then(() => {
@@ -109,9 +108,7 @@ export class Registro {
       });
     }
   }
-
-  // --- HELPERS PARA EL HTML ---
-
+  
   invalido(campo: string): boolean {
     const control = this.formulario.get(campo);
     return !!control && control.invalid && (control.touched || this.formularioEnviado());

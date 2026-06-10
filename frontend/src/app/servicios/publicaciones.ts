@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-// import { environment } from '../../../environments/environment'; // Ideal para no hardcodear la URL
+
 
 export type Publicacion = {
   id: string;
@@ -9,7 +9,7 @@ export type Publicacion = {
   imagenUrl?: string | null;
   usuarioId: string;
   nombreUsuario: string;
-  likes: string[]; // IDs de usuarios que dieron like
+  likes: string[];
   createdAt: string;
 };
 
@@ -35,7 +35,6 @@ export class PublicacionesService {
           error: (err) => {
             console.error('Error al cargar publicaciones:', err);
             
-            // Datos de prueba (Fallback) por si el backend de NestJS todavía no está levantado
             this.publicaciones.set([
               {
                 id: '1',
@@ -48,7 +47,6 @@ export class PublicacionesService {
               }
             ]);
             
-            // Resolvemos igual para que la pantalla no se quede cargando infinitamente
             resolve(); 
           }
         });
@@ -60,7 +58,6 @@ export class PublicacionesService {
       this.http.post<Publicacion>(this.apiUrl, formData)
         .subscribe({
           next: () => {
-            // Si se creó bien, recargamos la lista para que aparezca el nuevo post
             this.cargarPublicaciones().then(() => resolve());
           },
           error: (err) => {
@@ -76,7 +73,6 @@ export class PublicacionesService {
       this.http.delete(`${this.apiUrl}/${id}`)
         .subscribe({
           next: () => {
-            // Si se eliminó bien, actualizamos la lista visual
             this.cargarPublicaciones().then(() => resolve());
           },
           error: (err) => {
@@ -92,7 +88,6 @@ export class PublicacionesService {
       this.http.post(`${this.apiUrl}/${id}/like`, {})
         .subscribe({
           next: () => {
-            // Refrescamos para ver el corazoncito actualizado
             this.cargarPublicaciones().then(() => resolve());
           },
           error: (err) => {

@@ -197,7 +197,6 @@ h6 {
 .btn-arcade-primary:focus-visible {
   color: #ffffff;
   box-shadow: 0 0 22px rgba(253, 29, 13, 0.38);
-  transform: translateY(-1px);
 }
 
 .btn-arcade-primary:active,

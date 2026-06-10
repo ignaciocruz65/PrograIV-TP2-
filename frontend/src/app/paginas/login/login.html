@@ -13,18 +13,13 @@
           <span class="input-group-text glass-input border-end-0">
             <i class="bi bi-envelope-at"></i>
           </span>
-          <input
-            type="text"
-            formControlName="usuarioOCorreo"
-            class="form-control glass-input border-start-0"
-            placeholder="ejemplo@correo.com"
-            [class.is-invalid]="invalido('usuarioOCorreo')"
-          >
+          <input type="text" maxlength="50" formControlName="usuarioOCorreo" class="form-control glass-input border-start-0"
+            placeholder="ejemplo@correo.com" [class.is-invalid]="invalido('usuarioOCorreo')">
         </div>
         @if (invalido('usuarioOCorreo')) {
-          <div class="text-danger small mt-2">
-            Ingresa un usuario o correo válido (mín. 3 caracteres).
-          </div>
+        <div class="text-danger small mt-2">
+          Ingresa un usuario o correo válido (mín. 3 caracteres).
+        </div>
         }
       </div>
 
@@ -34,26 +29,21 @@
           <span class="input-group-text glass-input border-end-0">
             <i class="bi bi-lock"></i>
           </span>
-          <input
-            type="password"
-            formControlName="contrasena"
-            class="form-control glass-input border-start-0"
-            placeholder="••••••••"
-            [class.is-invalid]="invalido('contrasena')"
-          >
+          <input type="password" maxlength="20" formControlName="contrasena" class="form-control glass-input border-start-0"
+            placeholder="••••••••" [class.is-invalid]="invalido('contrasena')">
         </div>
         @if (invalido('contrasena')) {
-          <div class="text-danger small mt-2">
-            {{ obtenerErrorContrasena() }}
-          </div>
+        <div class="text-danger small mt-2">
+          {{ obtenerErrorContrasena() }}
+        </div>
         }
       </div>
 
       <button type="submit" class="btn btn-arcade btn-arcade-primary w-100 py-3 mb-4 shadow-sm" [disabled]="cargando()">
         @if (cargando()) {
-          <span class="spinner-border spinner-border-sm me-2"></span> Entrando...
+        <span class="spinner-border spinner-border-sm me-2"></span> Entrando...
         } @else {
-          Iniciar Sesión
+        Iniciar Sesión
         }
       </button>
 
