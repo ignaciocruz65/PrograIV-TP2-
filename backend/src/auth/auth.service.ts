@@ -17,7 +17,7 @@ export class AuthService {
   constructor(
     private readonly usuariosService: UsuariosService,
     private readonly jwtService: JwtService
-  ) {}
+  ) {}  
   
   // metodo para registrar un usuario
   async registrar(registroDto: RegistroDto, imagen?: any) {

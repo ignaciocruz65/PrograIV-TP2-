@@ -9,10 +9,9 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [
-    // 1. ConfigModule lee el archivo .env apenas arranca la app
+    // config del modulo para leer el .env
     ConfigModule.forRoot({ isGlobal: true }), 
     
-    // 2. Le pasamos directamente la variable de entorno a Mongoose
     MongooseModule.forRoot(process.env.MONGO_URL!), 
     
     AuthModule, 
