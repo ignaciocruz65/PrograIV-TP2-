@@ -8,6 +8,4 @@ export const routes: Routes = [
     { path: 'mi-perfil', loadComponent: () => import('./paginas/mi-perfil/mi-perfil').then(c => c.MiPerfil) },
     { path: '', pathMatch: 'full', redirectTo: 'login' },
     { path: '**', redirectTo: 'login' },
-
-
 ];

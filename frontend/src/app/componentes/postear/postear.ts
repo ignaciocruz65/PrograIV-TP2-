@@ -51,7 +51,6 @@ export class Postear {
     });
   }
 
-  // NUEVA FUNCIÓN PARA COMENTAR (KISS total)
   escribirComentario() {
     const usuario = this.servicioAuth.usuarioActual();
     if (!usuario) return;
@@ -63,10 +62,9 @@ export class Postear {
       showCancelButton: true,
       confirmButtonText: 'Comentar'
     }).then((result) => {
-      // Si escribió algo y le dio a confirmar
       if (result.isConfirmed && result.value) {
         this.servicioPub.comentar(this.post.id, usuario.nombreUsuario, result.value).subscribe(() => {
-          this.servicioPub.cargarPublicaciones(); // Recarga para mostrar el comentario
+          this.servicioPub.cargarPublicaciones();
         });
       }
     });

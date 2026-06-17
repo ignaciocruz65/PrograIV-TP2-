@@ -17,7 +17,7 @@ export class App {
   async confirmarCerrarSesion(): Promise<void> {
     const resultado = await Swal.fire({
       title: '¿Cerrar sesión?',
-      text: 'Tendrás que volver a ingresar tus credenciales para acceder.',
+      text: 'Vas a tener que volver a ingresar tus credenciales para acceder.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, salir',

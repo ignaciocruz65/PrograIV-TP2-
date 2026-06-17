@@ -28,7 +28,7 @@ export class AuthService {
   private router = inject(Router);
   
 
-  private apiUrl = 'http://localhost:3000'; 
+  private apiUrl = 'https://progra-iv-tp-2-six.vercel.app/auth'; 
 
   // señal reactiva para almacenar el usuario actual
   usuarioActual = signal<UsuarioPublico | null>(null);

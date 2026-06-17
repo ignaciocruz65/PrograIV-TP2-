@@ -19,7 +19,7 @@ export type Publicacion = {
 })
 export class PublicacionesService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/publicaciones';
+  private apiUrl = 'https://progra-iv-tp-2-six.vercel.app/publicaciones';
 
   publicaciones = signal<Publicacion[]>([]);
 
