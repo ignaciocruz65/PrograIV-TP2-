@@ -1,38 +1,47 @@
-<div class="page-shell">
+<div class="container py-4">
   <div class="row justify-content-center">
     <div class="col-lg-8">
-      <div class="section-heading text-center">
-        <h1 class="text-gradient">Muro Global</h1>
-        <p>Mira lo que otros están compartiendo</p>
+
+      <div class="glass-card p-4 shadow-sm mb-5 border border-primary">
+        <h4 class="mb-3">¿Qué estás pensando?</h4>
+        
+        <form (submit)="enviarPublicacion($event)">
+          <div class="mb-3">
+            <input type="text" name="titulo" class="form-control mb-2 bg-dark text-white" placeholder="Título de tu post..." >
+            <textarea name="descripcion" class="form-control bg-dark text-white" rows="3" placeholder="Escribí tu mensaje acá..." ></textarea>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center">
+            <input type="file" name="imagen" class="form-control w-auto bg-dark text-white" accept="image/*">
+            <button type="submit" class="btn btn-primary fw-bold">
+              <i class="bi bi-send-fill me-1"></i> Publicar
+            </button>
+          </div>
+        </form>
       </div>
 
-      <div class="glass-card p-4 mb-5 shadow-lg">
-        <div class="feed-composer d-flex flex-column flex-sm-row align-items-center gap-3">
-          <img
-            [src]="servicioAuth.usuarioActual()?.imagenPerfilUrl || 'https://ui-avatars.com/api/?name=' + servicioAuth.usuarioActual()?.nombre"
-            class="avatar-md rounded-circle border border-2 border-primary"
-            alt="Foto de perfil"
-          >
-          <input type="text" class="form-control glass-input flex-grow-1" placeholder="¿Qué estás pensando, {{ servicioAuth.usuarioActual()?.nombre }}?">
-          <button class="btn btn-arcade btn-arcade-primary py-2 px-4">Postear</button>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 text-gradient m-0">Últimos Posteos</h2>
+        <select class="form-select w-auto bg-dark text-white" (change)="cambiarOrden($event)">
+          <option value="fecha">Más recientes</option>
+          <option value="likes">Más populares</option>
+        </select>
+      </div>
+
+      @for (item of servicioPub.publicaciones(); track item.id) {
+        <app-postear [post]="item"></app-postear>
+      } @empty {
+        <p class="text-center text-muted mt-5">Nadie publicó nada todavía. ¡Rompé el hielo!</p>
+      }
+
+      @if (servicioPub.publicaciones().length >= limite) {
+        <div class="text-center mt-4">
+          <button class="btn btn-outline-light" (click)="cargarMas()">
+            Cargar publicaciones antiguas
+          </button>
         </div>
-      </div>
+      }
 
-      <div class="row g-4">
-        <div class="col-12">
-          <article class="glass-card p-4 shadow-sm">
-            <div class="d-flex align-items-center mb-3">
-              <img src="https://ui-avatars.com/api/?name=Admin" class="avatar-md rounded-circle me-3 border border-2 border-white" alt="Administrador">
-              <div>
-                <h2 class="h6 mb-0 text-gradient">Administrador</h2>
-                <small class="text-muted">Hace 2 horas</small>
-              </div>
-            </div>
-            <h3 class="h5 fw-bold mb-2">¡Bienvenidos!</h3>
-
-          </article>
-        </div>
-      </div>
     </div>
   </div>
 </div>

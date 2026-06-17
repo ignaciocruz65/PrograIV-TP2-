@@ -1,76 +1,44 @@
-<div class="page-shell">
-  <div class="profile-grid row g-4">
-    <div class="col-lg-4">
-      <section class="glass-card p-4 text-center shadow-lg h-100">
-        <div class="position-relative d-inline-block mb-3">
-          <img
-            [src]="servicioAuth.usuarioActual()?.imagenPerfilUrl || 'https://ui-avatars.com/api/?name=' + servicioAuth.usuarioActual()?.nombre"
-            class="avatar-lg rounded-circle shadow-lg border border-4 border-primary"
-            alt="Foto de perfil"
-          >
-          <span class="position-absolute bottom-0 end-0 badge rounded-pill bg-success border border-2 border-white p-2">
-            <i class="bi bi-patch-check-fill"></i>
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="glass-card text-center p-5 mb-5 shadow-lg">
+        <img
+          [src]="servicioAuth.usuarioActual()?.imagenPerfilUrl || 'https://ui-avatars.com/api/?name=' + servicioAuth.usuarioActual()?.nombre"
+          class="rounded-circle border border-4 border-danger mb-3"
+          style="width: 150px; height: 150px; object-fit: cover;">
+
+        <h1 class="text-white fw-bold mb-0">
+          {{ servicioAuth.usuarioActual()?.nombre }} {{ servicioAuth.usuarioActual()?.apellido }}
+        </h1>
+        <h3 class="h5 text-muted mb-3">@{{ servicioAuth.usuarioActual()?.nombreUsuario }}</h3>
+
+        <p class="text-light mb-1"><i class="bi bi-envelope me-2"></i>{{ servicioAuth.usuarioActual()?.correo }}</p>
+        @if (servicioAuth.usuarioActual()?.descripcionBreve) {
+        <p class="text-secondary fst-italic mb-4">"{{ servicioAuth.usuarioActual()?.descripcionBreve }}"</p>
+        }
+
+        <div class="mt-3">
+          <span class="badge bg-dark border border-secondary text-uppercase px-3 py-2">
+            <i class="bi bi-person-badge me-2"></i> Perfil: <span class="text-danger">{{
+              servicioAuth.usuarioActual()?.perfil }}</span>
           </span>
         </div>
+      </div>
 
-        <h1 class="h3 fw-bold mb-1 text-gradient">{{ servicioAuth.usuarioActual()?.nombre }} {{ servicioAuth.usuarioActual()?.apellido }}</h1>
-        <p class="text-primary fw-semibold small mb-4">@{{ servicioAuth.usuarioActual()?.nombreUsuario }}</p>
+      <div class="d-flex align-items-center mb-4 border-bottom border-secondary pb-2">
+        <i class="bi bi-clock-history fs-4 me-2 text-danger"></i>
+        <h2 class="h4 m-0 text-white">Mis últimas publicaciones</h2>
+      </div>
 
-        <div class="text-start">
-          <div class="mb-3">
-            <label class="small text-muted text-uppercase fw-bold">Correo</label>
-            <p class="mb-0 fw-medium">{{ servicioAuth.usuarioActual()?.correo }}</p>
-          </div>
-          <div class="mb-3">
-            <label class="small text-muted text-uppercase fw-bold">Miembro desde</label>
-            <p class="mb-0 fw-medium">{{ servicioAuth.usuarioActual()?.createdAt | date:'longDate' }}</p>
-          </div>
-          <div class="mb-3">
-            <label class="small text-muted text-uppercase fw-bold">Bio</label>
-            <p class="mb-0 small fst-italic text-muted">{{ servicioAuth.usuarioActual()?.descripcionBreve }}</p>
-          </div>
-        </div>
+      @for (item of servicioPub.publicaciones(); track item.id) {
+      <app-postear [post]="item"></app-postear>
+      } @empty {
+      <div class="text-center p-5 glass-card">
+        <p class="text-muted fs-5">Aún no publicaste nada.</p>
+      </div>
+      }
 
-        <button class="btn btn-outline-primary w-100 mt-3 rounded-pill">
-          <i class="bi bi-pencil me-1"></i> Editar Perfil
-        </button>
-      </section>
-    </div>
-
-    <div class="col-lg-8">
-      <section class="glass-card p-4 shadow-lg h-100">
-        <h2 class="h4 fw-bold mb-4 d-flex align-items-center text-gradient">
-          <i class="bi bi-bar-chart-fill me-2 text-primary"></i>
-          Actividad del Usuario
-        </h2>
-
-        <div class="row g-3 mb-4">
-          <div class="col-md-4">
-            <div class="stat-card">
-              <h3 class="fw-bold mb-0">0</h3>
-              <small class="text-muted text-uppercase">Publicaciones</small>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="stat-card">
-              <h3 class="fw-bold mb-0">0</h3>
-              <small class="text-muted text-uppercase">Me gusta</small>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="stat-card">
-              <h3 class="fw-bold mb-0">0</h3>
-              <small class="text-muted text-uppercase">Comentarios</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center py-5">
-          <i class="bi bi-journal-x display-4 text-muted opacity-25"></i>
-          <p class="text-muted mt-3 mb-0">Aún no realizaste publicaciones</p>
-          <a routerLink="/publicaciones" class="btn btn-arcade btn-arcade-primary mt-4">Ir al Muro</a>
-        </div>
-      </section>
     </div>
   </div>
 </div>

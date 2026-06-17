@@ -44,7 +44,7 @@ export class UsuariosService {
             ]
         }).lean();
 
-        return !!usuarioExistente; // retornamos true si lo encontró  false si no
+        return !!usuarioExistente; 
     }
 
     quitarContrasena(usuario: any): UsuarioPublico {
