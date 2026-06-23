@@ -10,7 +10,7 @@ export type Publicacion = {
   usuarioId: string;
   nombreUsuario: string;
   likes: string[];
-  comentarios: { nombreUsuario: string, texto: string }[];
+  comentarios: { id?: string, nombreUsuario: string, texto: string, modificado?: boolean }[];
   createdAt: string;
 };
 
@@ -19,11 +19,10 @@ export type Publicacion = {
 })
 export class PublicacionesService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://progra-iv-tp-2-six.vercel.app';
+  private apiUrl = 'https://progra-iv-tp-2-six.vercel.app/publicaciones';
 
   publicaciones = signal<Publicacion[]>([]);
 
-  // GET
   cargarPublicaciones(limit: number = 10, offset: number = 0, sort: string = 'fecha', usuarioId?: string) {
     let urlCompleta = `${this.apiUrl}?limit=${limit}&offset=${offset}&sort=${sort}`;
     if (usuarioId) urlCompleta += `&usuarioId=${usuarioId}`;

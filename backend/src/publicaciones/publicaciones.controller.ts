@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Put, Delete, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PublicacionesService } from './publicaciones.service';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
@@ -42,6 +42,27 @@ export class PublicacionesController {
     @Post(':id/comentarios')
     comentar(@Param('id') id: string, @Body('nombreUsuario') nombreUsuario: string, @Body('texto') texto: string) {
         return this.publicacionesService.agregarComentario(id, nombreUsuario, texto);
+    }
+    
+
+    @Put(':id/comentarios/:idComentario')
+    modificarComentario(
+        @Param('id') idPub: string, 
+        @Param('idComentario') idCom: string, 
+        @Body('texto') texto: string
+    ) {
+        return this.publicacionesService.modificarComentario(idPub, idCom, texto);
+    }
+
+    @Get(':id/comentarios')
+    traerComentarios(
+        @Param('id') id: string,
+        @Query('limit') limit: string,
+        @Query('offset') offset: string
+    ) {
+        const limite = limit ? parseInt(limit, 10) : 10;
+        const salto = offset ? parseInt(offset, 10) : 0;
+        return this.publicacionesService.listarComentarios(id, limite, salto);
     }
     
     @Delete(':id/like')

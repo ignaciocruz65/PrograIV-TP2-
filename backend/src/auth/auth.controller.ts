@@ -13,9 +13,21 @@ export class AuthController {
     registrar(@Body() dto: RegistroDto, @UploadedFile() imagen?: any) {
         return this.authService.registrar(dto, imagen);
     }
-
+    @Post('actualizar')
+    actualizar(@Body() dto: { token: string }) {
+        return this.authService.actualizar(dto.token);
+    }
+    @Post('autorizar')
+    autorizar(@Body() dto: { token: string }) {
+        return this.authService.autorizar(dto.token);
+    }
     @Post('login')
     login(@Body() dto: LoginDto) {
         return this.authService.login(dto);
     }
+    @Post('refrescar')
+    refrescarToken(@Body('token') tokenViejo: string) {
+        return this.authService.refrescarToken(tokenViejo);
+    }
+    
 }

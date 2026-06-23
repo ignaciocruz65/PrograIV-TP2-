@@ -13,7 +13,7 @@ import { UsuariosModule } from '../usuarios/usuarios.module';
     JwtModule.register({
       global: true, 
       secret: process.env.JWT_SECRET || 'clave_secreta_para_el_tp_2026', 
-      signOptions: { expiresIn: '12h' },
+      signOptions: { expiresIn: '15m' },
     })
   ],
   controllers: [AuthController],

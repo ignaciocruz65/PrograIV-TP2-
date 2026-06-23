@@ -116,4 +116,54 @@ export class AuthService {
 
     return publicUrlData.publicUrl;
   }
+
+
+  async autorizar(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      return { usuario: payload };
+    } catch (error) {
+      throw new UnauthorizedException('Token inválido');
+    }
+  }
+
+  async actualizar(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      
+      delete payload.exp;
+      delete payload.iat;
+      
+      // nuevo token +15 min
+      return { token: await this.jwtService.signAsync(payload) };
+    } catch {
+      throw new UnauthorizedException('Token inválido o vencido');
+    }
+  }
+
+  async refrescarToken(tokenViejo: string) {
+    try {
+      
+      const payload = this.jwtService.decode(tokenViejo) as any;
+      
+      if (!payload) {
+        throw new Error('Token inválido');
+      }
+
+      // payload nuevo con token nuevo
+      const payloadNuevo = { 
+        sub: payload.sub,
+        nombreUsuario: payload.nombreUsuario,
+        correo: payload.correo,
+        perfil: payload.perfil
+      };
+      //firma
+      const tokenNuevo = this.jwtService.sign(payloadNuevo);
+
+      return { token: tokenNuevo };
+      
+    } catch (error) {
+      throw new UnauthorizedException('No se pudo refrescar el token');
+    }
+  }
 }

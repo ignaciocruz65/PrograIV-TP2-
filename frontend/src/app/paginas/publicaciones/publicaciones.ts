@@ -2,12 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../servicios/auth';
 import { PublicacionesService } from '../../servicios/publicaciones';
 import { Postear } from '../../componentes/postear/postear';
+import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-publicaciones',
   standalone: true,
-  imports: [Postear], 
+  imports: [Postear, RouterLink], 
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css',
 })
@@ -27,6 +28,14 @@ export class Publicaciones implements OnInit {
 
   consultarServidor() {
     this.servicioPub.cargarPublicaciones(this.limite, this.salto, this.ordenActual);
+  }
+  paginaSiguiente() {
+    this.salto += this.limite;
+    this.consultarServidor();
+  }	
+  paginaAnterior() {
+    this.salto -= this.limite;
+    this.consultarServidor();
   }
 
   enviarPublicacion(evento: Event) {
@@ -65,8 +74,4 @@ export class Publicaciones implements OnInit {
     this.consultarServidor();
   }
 
-  cargarMas() {
-    this.salto += this.limite;
-    this.consultarServidor();
-  }
 }

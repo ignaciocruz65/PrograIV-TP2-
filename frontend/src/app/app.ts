@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './servicios/auth';
@@ -10,9 +10,19 @@ import Swal from 'sweetalert2';
   imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: './app.html',
 })
-export class App {
+export class App implements OnInit {
   // publico para que el app.html pueda usar servicioAuth.estaLogueado()
   public readonly servicioAuth = inject(AuthService);
+
+  cargando = true; 
+
+  ngOnInit() {
+    this.servicioAuth.validarTokenInicial();
+    
+    setTimeout(() => {
+      this.cargando = false;
+    }, 1000);
+  }
 
   async confirmarCerrarSesion(): Promise<void> {
     const resultado = await Swal.fire({

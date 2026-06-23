@@ -1,5 +1,4 @@
 <div class="d-flex flex-column min-vh-100">
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top navbar-arcade py-3">
     <div class="container">
       <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/">
@@ -7,7 +6,7 @@
         <img src="assets/ganleyicon.png" alt="GGANLEY" class="w-4 h-4">
         <span class="text-gradient">GGANLEY</span>
       </a>
-      
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -15,43 +14,51 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           @if (servicioAuth.usuarioActual()) {
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/publicaciones" routerLinkActive="active">
-                <i class="bi bi-grid-fill me-1"></i> Muro
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/mi-perfil" routerLinkActive="active">
-                <i class="bi bi-person-badge-fill me-1"></i> Perfil
-              </a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/publicaciones" routerLinkActive="active">
+              <i class="bi bi-grid-fill me-1"></i> Muro
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/mi-perfil" routerLinkActive="active">
+              <i class="bi bi-person-badge-fill me-1"></i> Perfil
+            </a>
+          </li>
           }
         </ul>
 
         <div class="nav-actions d-flex align-items-center gap-3">
           @if (!servicioAuth.usuarioActual()) {
-            <a routerLink="/login" class="btn btn-outline-light rounded-pill px-4">Entrar</a>
-            <a routerLink="/registro" class="btn btn-arcade btn-arcade-primary rounded-pill px-4 shadow-sm">Unirse</a>
-          } 
+          <a routerLink="/login" class="btn btn-outline-light rounded-pill px-4">Entrar</a>
+          <a routerLink="/registro" class="btn btn-arcade btn-arcade-primary rounded-pill px-4 shadow-sm">Unirse</a>
+          }
           @else {
-            <div class="d-flex align-items-center me-3 text-light">
-                <img [src]="servicioAuth.usuarioActual()?.imagenPerfilUrl || 'https://ui-avatars.com/api/?name=' + servicioAuth.usuarioActual()?.nombre" 
-                     class="avatar-sm rounded-circle me-2 border border-2 border-primary">
-                <span class="small fw-semibold opacity-75">
-                  @{{ servicioAuth.usuarioActual()?.nombreUsuario }}
-                </span>
-            </div>
-            <button (click)="confirmarCerrarSesion()" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm" aria-label="Cerrar sesión">
-              <i class="bi bi-power"></i>
-            </button>
+          <div class="d-flex align-items-center me-3 text-light">
+            <img
+              [src]="servicioAuth.usuarioActual()?.imagenPerfilUrl || 'https://ui-avatars.com/api/?name=' + servicioAuth.usuarioActual()?.nombre"
+              class="avatar-sm rounded-circle me-2 border border-2 border-primary">
+            <span class="small fw-semibold opacity-75">
+              @{{ servicioAuth.usuarioActual()?.nombreUsuario }}
+            </span>
+          </div>
+          <button (click)="confirmarCerrarSesion()" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
+            aria-label="Cerrar sesión">
+            <i class="bi bi-power"></i>
+          </button>
           }
         </div>
       </div>
     </div>
   </nav>
-
-  <main class="flex-grow-1">
-    <router-outlet></router-outlet>
-  </main>
+  @if (cargando) {
+  <div class="d-flex justify-content-center align-items-center vh-100 bg-dark text-white">
+    <div class="text-center">
+      <h2>Cargando...</h2>
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+  </div>
+  } @else {
+  <router-outlet></router-outlet>
+  }
 
 </div>

@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 export type UsuarioPublico = {
   id: string;
@@ -26,18 +27,71 @@ export interface AuthResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private apiUrl = 'http://localhost:3000'; 
+  private temporizador: any;
   
-
-  private apiUrl = 'https://progra-iv-tp-2-six.vercel.app'; 
-
   // señal reactiva para almacenar el usuario actual
   usuarioActual = signal<UsuarioPublico | null>(null);
 
   constructor() {
-    const userJson = localStorage.getItem('');
+    const userJson = localStorage.getItem('usuario');
     if (userJson) {
       this.usuarioActual.set(JSON.parse(userJson));
     }
+  }
+
+  validarTokenInicial() {
+    const token = this.getToken();
+    if (!token) return; 
+
+    // preguntamos en el back
+    this.http.post<{usuario: UsuarioPublico}>(`${this.apiUrl}/auth/autorizar`, { token })
+      .subscribe({
+        next: (res) => {
+          this.usuarioActual.set(res.usuario);
+          this.iniciarTemporizador(); // empieza reloj
+        },
+        error: () => this.cerrarSesion() // cerrado
+      });
+  }
+
+  iniciarTemporizador() {
+    clearTimeout(this.temporizador); // limpiar reloj anterior
+    
+    // 600000 milisegundos = 10 minutos
+    this.temporizador = setTimeout(() => {
+      Swal.fire({
+        title: 'Tu sesión casi expira',
+        text: 'Te quedan 5 minutos. ¿Querés extender tu sesión?',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, extender',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.refrescarToken();
+        }else{
+          this.cerrarSesion();
+        }
+      });
+    }, 6000); 
+  }
+
+
+  refrescarToken() {
+    const tokenViejo = this.getToken();
+    if (!tokenViejo) return;
+
+    this.http.post<{token: string}>(`${this.apiUrl}/auth/refrescar`, { token: tokenViejo })
+      .subscribe({
+        next: (res) => {
+          localStorage.setItem('token', res.token); // reescribimos el viejo token 
+          this.iniciarTemporizador(); 
+        },
+        error: (err) => {
+          console.error('Error en el refrescar token:', err);
+          this.cerrarSesion();
+        }
+      });
   }
 
   login(usuarioOCorreo: string, password: string): Promise<UsuarioPublico> {
@@ -47,10 +101,10 @@ export class AuthService {
           next: (response) => {
             this.usuarioActual.set(response.usuario);
             
-            // guardado de token y datos en el navegador
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             localStorage.setItem('token', response.token); 
             
+            this.iniciarTemporizador();
             
             resolve(response.usuario);
           },
@@ -66,9 +120,7 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.http.post<AuthResponse>(`${this.apiUrl}/auth/registro`, formData)
         .subscribe({
-          next: (response) => {
-            resolve(response);
-          },
+          next: (response) => resolve(response),
           error: (err) => {
             console.error('Error en el registro:', err);
             reject(err);
@@ -81,11 +133,12 @@ export class AuthService {
     this.usuarioActual.set(null);
     localStorage.removeItem('usuario');
     localStorage.removeItem('token'); 
+    clearTimeout(this.temporizador);
+    
     this.router.navigate(['/login']);
   }
 
   estaLogueado(): boolean {
-    // revisa que exista el usuario y exista el token
     return this.usuarioActual() !== null && localStorage.getItem('token') !== null;
   }
 

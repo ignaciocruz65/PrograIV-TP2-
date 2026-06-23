@@ -53,6 +53,7 @@ export class Login {
         background: '#0a0f1e', 
         color: '#fff'
       }).then(() => {
+        this.cargando.set(false);
         this.enrutador.navigate(['/publicaciones']);
       });
 
@@ -70,14 +71,13 @@ export class Login {
     }
   }
 
-  // verifica si el campo es inválido y si el usuario ha tocado el campo o si el formulario ha sido enviado
+  // verifica si el campo es inválido
   invalido(campo: 'usuarioOCorreo' | 'contrasena'): boolean {
     const control = this.formulario.controls[campo];
     return control.invalid && (control.touched || this.formularioEnviado());
   }
 
   obtenerErrorContrasena(): string {
-
     if (this.formulario.controls.contrasena.value === '') {
       return 'La contraseña es obligatoria.';
     }
@@ -87,5 +87,14 @@ export class Login {
     }
 
     return '';
+  }
+
+  ingresoRapido(rol: 'admin' | 'usuario') {
+    if (rol === 'admin') {
+      this.formulario.patchValue({ usuarioOCorreo: 'ganley22', contrasena: 'Ganley12345' });
+    } else {
+      this.formulario.patchValue({ usuarioOCorreo: 'tengoquecrear', contrasena: 'Tengoquecrear12345' });
+    }
+    this.enviar();
   }
 }
