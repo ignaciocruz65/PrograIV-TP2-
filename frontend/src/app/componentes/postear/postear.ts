@@ -51,22 +51,14 @@ export class Postear {
     });
   }
 
-  escribirComentario() {
+  escribirComentario(texto: string) {
+    if (!texto.trim()) return;
+
     const usuario = this.servicioAuth.usuarioActual();
     if (!usuario) return;
 
-    Swal.fire({
-      title: 'Dejá un comentario',
-      input: 'text',
-      inputPlaceholder: 'Escribí acá...',
-      showCancelButton: true,
-      confirmButtonText: 'Comentar'
-    }).then((result) => {
-      if (result.isConfirmed && result.value) {
-        this.servicioPub.comentar(this.post.id, usuario.nombreUsuario, result.value).subscribe(() => {
-          this.servicioPub.cargarPublicaciones();
-        });
-      }
+    this.servicioPub.comentar(this.post.id, usuario.nombreUsuario, texto).subscribe(() => {
+      this.servicioPub.cargarPublicaciones();
     });
   }
 }

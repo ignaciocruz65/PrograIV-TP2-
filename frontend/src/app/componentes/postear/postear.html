@@ -37,9 +37,15 @@
             <span class="ms-1">{{ post.likes.length }}</span>
         </button>
 
-        <button class="btn btn-sm btn-outline-secondary text-white" (click)="escribirComentario()">
-            <i class="bi bi-chat me-1"></i> Comentar
-        </button>
+        <div class="input-group mt-3">
+            <input type="text" class="form-control bg-dark text-white border-secondary"
+                placeholder="Escribe un comentario..." #cajaComentario
+                (keyup.enter)="escribirComentario(cajaComentario.value); cajaComentario.value = ''">
+            <button class="btn btn-primary"
+                (click)="escribirComentario(cajaComentario.value); cajaComentario.value = ''">
+                <i class="bi bi-send"></i>
+            </button>
+        </div>
     </div>
 
     @if (post.comentarios && post.comentarios.length > 0) {

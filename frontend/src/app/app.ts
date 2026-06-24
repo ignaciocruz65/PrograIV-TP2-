@@ -18,10 +18,6 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.servicioAuth.validarTokenInicial();
-    
-    setTimeout(() => {
-      this.cargando = false;
-    }, 1000);
   }
 
   async confirmarCerrarSesion(): Promise<void> {

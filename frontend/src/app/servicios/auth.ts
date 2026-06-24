@@ -27,22 +27,27 @@ export interface AuthResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:3000'; 
+  private apiUrl = 'https://progra-iv-tp-2-six.vercel.app';
   private temporizador: any;
   
   // señal reactiva para almacenar el usuario actual
   usuarioActual = signal<UsuarioPublico | null>(null);
+  cargandoGlobal = signal<boolean>(true);
 
   constructor() {
     const userJson = localStorage.getItem('usuario');
     if (userJson) {
       this.usuarioActual.set(JSON.parse(userJson));
     }
+    this.cargandoGlobal.set(false);
   }
 
   validarTokenInicial() {
     const token = this.getToken();
-    if (!token) return; 
+    if (!token){
+      this.cargandoGlobal.set(false);
+      return;
+    }
 
     // preguntamos en el back
     this.http.post<{usuario: UsuarioPublico}>(`${this.apiUrl}/auth/autorizar`, { token })
@@ -50,8 +55,14 @@ export class AuthService {
         next: (res) => {
           this.usuarioActual.set(res.usuario);
           this.iniciarTemporizador(); // empieza reloj
+          console.log('Token válido:', res);
+          this.cargandoGlobal.set(false);
         },
-        error: () => this.cerrarSesion() // cerrado
+        error: (err) => {
+          console.error('Error en el validar token inicial:', err);
+          this.cargandoGlobal.set(false);
+          this.cerrarSesion(); // cerrado
+        }
       });
   }
 
@@ -73,7 +84,7 @@ export class AuthService {
           this.cerrarSesion();
         }
       });
-    }, 6000); 
+    }, 60000); 
   }
 
 
