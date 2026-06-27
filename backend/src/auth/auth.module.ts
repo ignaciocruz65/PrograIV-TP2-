@@ -6,14 +6,11 @@ import { UsuariosModule } from '../usuarios/usuarios.module';
 
 @Module({
   imports: [
-    // importamos usuarios module para acceder a los servicios de usuarios y a las entidades de usuarios
     UsuariosModule,
-    
-    // importamos jwt module para acceder a jwt y a las entidades de jwt
     JwtModule.register({
       global: true, 
-      secret: process.env.JWT_SECRET || 'clave_secreta_para_el_tp_2026', 
-      signOptions: { expiresIn: '15m' },
+      secret: process.env.JWT_SECRET || 'clave', 
+      signOptions: { expiresIn: '30s' },
     })
   ],
   controllers: [AuthController],

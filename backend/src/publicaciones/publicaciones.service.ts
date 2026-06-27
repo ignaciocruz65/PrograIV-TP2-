@@ -32,7 +32,6 @@ export class PublicacionesService {
     if (usuarioIdFiltro) {
       filtro.usuarioId = usuarioIdFiltro;
     }
-
     const orden: any = ordenarPor === 'likes' ? { likes: -1 } : { createdAt: -1 };
 
     // buscamos las publicaciones
@@ -89,10 +88,10 @@ export class PublicacionesService {
   }
   async modificarComentario(idPublicacion: string, idComentario: string, textoNuevo: string): Promise<void> {
     await this.publicacionModel.findOneAndUpdate(
-      { _id: idPublicacion, "comentarios.id": idComentario }, // Busca el post y el comentario exacto
+      { _id: idPublicacion, "comentarios.id": idComentario }, // busca post y el comentario exacto
       {
         $set: {
-          "comentarios.$.texto": textoNuevo,      // El símbolo $ significa "el comentario que encontraste arriba"
+          "comentarios.$.texto": textoNuevo,
           "comentarios.$.modificado": true
         }
       }
@@ -103,12 +102,11 @@ export class PublicacionesService {
   async listarComentarios(idPublicacion: string, limite: number = 10, salto: number = 0): Promise<any[]> {
     const publicacion = await this.publicacionModel.findById(idPublicacion).lean();
     if (!publicacion) throw new BadRequestException('La publicación no existe');
-
     let comentarios = publicacion.comentarios || [];
 
-    // Ordenamos: los más recientes primero (de mayor a menor fecha)
+    // los más recientes primero
     comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-    // Paginamos cortando el array
+    // paginacion cortando el array
     return comentarios.slice(salto, salto + limite);
   }
 

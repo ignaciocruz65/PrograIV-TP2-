@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../servicios/auth';
 import { PublicacionesService, Publicacion } from '../../servicios/publicaciones';
@@ -10,11 +10,17 @@ import Swal from 'sweetalert2';
   templateUrl: './postear.html',
   styleUrl: './postear.css',
 })
-export class Postear {
+export class Postear implements OnInit {
   @Input({ required: true }) post!: Publicacion;
 
   servicioAuth = inject(AuthService);
   servicioPub = inject(PublicacionesService);
+  soyAdmin = false;
+
+  ngOnInit(): void {
+    const usuario = this.servicioAuth.usuarioActual();
+    this.soyAdmin = usuario?.perfil === 'administrador';
+  }
 
   get soyDuenio(): boolean {
     return this.post.usuarioId === this.servicioAuth.usuarioActual()?.id;

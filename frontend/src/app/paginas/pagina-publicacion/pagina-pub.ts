@@ -20,7 +20,7 @@ export class PaginaPublicacionComponent implements OnInit {
     comentarios = signal<any[]>([])
     miUsuario: string = ''
     
-  // paginado
+    // paginado
     limite = 5
     salto = 0
     hayMasComentarios = true 

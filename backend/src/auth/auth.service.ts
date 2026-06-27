@@ -67,20 +67,22 @@ export class AuthService {
   
   // metodo para hacer login de un usuario
   async login(loginDto: LoginDto) {
+    
     const usuario = await this.usuariosService.buscarPorCorreoOCuenta(loginDto.usuarioOCorreo);
-
     if (!usuario) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
+    
+    if (usuario.activo === false) {
+      throw new UnauthorizedException('Tu cuenta ha sido deshabilitada por un administrador.');
+    }
 
     const hashLogin = crypto.createHash('sha256').update(loginDto.password).digest('hex');
-
     if (usuario.passwordHash !== hashLogin) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
     const usuarioSeguro = this.usuariosService.quitarContrasena(usuario);
-
     const payload = { 
       sub: usuarioSeguro.id,
       correo: usuarioSeguro.correo, 

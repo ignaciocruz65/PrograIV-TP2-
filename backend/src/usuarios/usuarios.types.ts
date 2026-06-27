@@ -10,6 +10,7 @@ export interface Usuario {
     fechaNacimiento: string;
     descripcionBreve: string;
     perfil: PerfilUsuario;
+    activo: boolean;
     imagenPerfilUrl: string | null;
     createdAt: string;
 }

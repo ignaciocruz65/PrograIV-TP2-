@@ -3,6 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PublicacionesController } from './publicaciones.controller';
 import { PublicacionesService } from './publicaciones.service';
 import { Publicacion, PublicacionSchema } from './publicacion.schema'; 
+import { EstadisticasController } from './estadisticas.controller';
+
+
 
 @Module({
   imports: [
@@ -10,7 +13,7 @@ import { Publicacion, PublicacionSchema } from './publicacion.schema';
       { name: Publicacion.name, schema: PublicacionSchema } 
     ])
   ],
-  controllers: [PublicacionesController],
+  controllers: [PublicacionesController, EstadisticasController],
   providers: [PublicacionesService]
 })
 export class PublicacionesModule {}

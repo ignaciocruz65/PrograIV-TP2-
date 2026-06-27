@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        @if (soyDuenio) {
+        @if (soyDuenio || soyAdmin) {
         <button class="btn btn-sm btn-outline-danger" (click)="borrarPost()">
             <i class="bi bi-trash"></i>
         </button>

@@ -69,4 +69,6 @@ export class PublicacionesController {
     quitarLike (@Param('id') idPublicacion: string, @Body('usuarioId') usuarioId: string) {
         return this.publicacionesService.quitarLike(idPublicacion, usuarioId);
     }
+
+    
 }

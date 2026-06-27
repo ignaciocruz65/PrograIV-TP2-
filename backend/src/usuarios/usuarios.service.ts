@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {Usuario } from './usuario.shema';
 import { UsuarioPublico } from './usuarios.types';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UsuariosService {
@@ -10,6 +11,25 @@ export class UsuariosService {
     constructor(
         @InjectModel(Usuario.name) private readonly usuarioModel: Model<Usuario>
     ) {}
+
+    async crearDesdeAdmin(datos: any): Promise<UsuarioPublico> {
+        const passwordHash = crypto.createHash('sha256').update(datos.password).digest('hex');
+        const usuarioCreado = await this.usuarioModel.create({
+            ...datos,
+            passwordHash: passwordHash
+        });
+        return this.quitarContrasena(usuarioCreado.toObject());
+    }
+
+    async cambiarEstado(id: string, estado: boolean): Promise<UsuarioPublico> {
+        const usuarioActualizado = await this.usuarioModel.findByIdAndUpdate(
+            id, 
+            { activo: estado }, 
+            { new: true }
+        ).lean();
+        return this.quitarContrasena(usuarioActualizado);
+    }
+
 
     //  / todo es asíncrono porque lo conectamos a mongodb 
     async crear(nuevoUsuario: any): Promise<UsuarioPublico> {
@@ -58,6 +78,7 @@ export class UsuariosService {
             fechaNacimiento: usuario.fechaNacimiento,
             descripcionBreve: usuario.descripcionBreve,
             perfil: usuario.perfil,
+            activo: usuario.activo,
             imagenPerfilUrl: usuario.imagenPerfilUrl,
             createdAt: usuario.createdAt
         };

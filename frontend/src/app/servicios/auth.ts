@@ -84,7 +84,7 @@ export class AuthService {
           this.cerrarSesion();
         }
       });
-    }, 60000); 
+    }, 15000); 
   }
 
 
@@ -111,12 +111,10 @@ export class AuthService {
         .subscribe({
           next: (response) => {
             this.usuarioActual.set(response.usuario);
-            
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             localStorage.setItem('token', response.token); 
             
             this.iniciarTemporizador();
-            
             resolve(response.usuario);
           },
           error: (err) => {

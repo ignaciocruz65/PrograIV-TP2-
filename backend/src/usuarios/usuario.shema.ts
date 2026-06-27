@@ -28,6 +28,9 @@ export class Usuario extends Document {
     @Prop({ type: String, default: 'usuario' })
     perfil: PerfilUsuario;
 
+    @Prop({ default: true })
+    activo: boolean
+
     @Prop({ type: String, default: null })
     imagenPerfilUrl: string | null;
 }
