@@ -14,6 +14,7 @@ export class UsuariosController {
 
     @Post('alta')
     crearUsuario(@Body() body: any) {
+
         return this.usuariosService.crearDesdeAdmin(body);
     }
 

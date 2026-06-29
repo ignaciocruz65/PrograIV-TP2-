@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { ActivatedRoute, RouterLink } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService } from '../../servicios/auth'
 import { CommonModule } from '@angular/common'
 import Swal from 'sweetalert2'
@@ -13,13 +13,14 @@ import Swal from 'sweetalert2'
 export class PaginaPublicacionComponent implements OnInit {
     private http = inject(HttpClient)
     private route = inject(ActivatedRoute)
+    private router = inject(Router)
     private authService = inject(AuthService)
     private apiUrl = 'https://progra-iv-tp-2-six.vercel.app/publicaciones'    
 
     post = signal<any>(null)
     comentarios = signal<any[]>([])
     miUsuario: string = ''
-    
+    soyAdmin: boolean = false
     // paginado
     limite = 5
     salto = 0
@@ -29,6 +30,7 @@ export class PaginaPublicacionComponent implements OnInit {
         const usuario = this.authService.usuarioActual()
         if (usuario) {
             this.miUsuario = usuario.nombreUsuario
+            this.soyAdmin = usuario.perfil == 'administrador'
         }
 
         const id = this.route.snapshot.paramMap.get('id')
@@ -111,6 +113,28 @@ export class PaginaPublicacionComponent implements OnInit {
                 error: (err) => console.log('Error al editar el comentario', err)
             })
         }
+        })
+    }
+
+    borrarPost() {
+        const usuario = this.authService.usuarioActual()
+        if (!usuario) return
+
+        Swal.fire({
+            title: '¿Borrar publicación?', 
+            text: 'Esto no se puede deshacer',
+            icon: 'warning', 
+            showCancelButton: true, 
+            confirmButtonText: 'Sí, borrar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.http.delete(`${this.apiUrl}/${this.post().id}`, {
+                    body: { usuarioId: usuario.id, perfil: usuario.perfil }
+                }).subscribe(() => {
+                    Swal.fire('Borrado', 'Publicación eliminada.', 'success')
+                    this.router.navigate(['/publicaciones'])
+                })
+            }
         })
     }
 }

@@ -26,6 +26,11 @@
           </li>
           }
         </ul>
+        @if (servicioAuth.usuarioActual()?.perfil === 'administrador') {
+        <a class="nav-link text-warning" routerLink="/dashboard/usuarios">
+          <i class="bi bi-shield-lock"></i> Admin Usuarios
+        </a>
+        }
 
         <div class="nav-actions d-flex align-items-center gap-3">
           @if (!servicioAuth.usuarioActual()) {
@@ -41,6 +46,11 @@
               @{{ servicioAuth.usuarioActual()?.nombreUsuario }}
             </span>
           </div>
+          @if (servicioAuth.usuarioActual()) {
+          <div class="badge bg-dark border-secondary text-warning fs-6">
+            Sesión: {{ servicioAuth.tiempoRestante() * 1000 | date:'mm:ss' }}
+          </div>
+          }
           <button (click)="confirmarCerrarSesion()" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
             aria-label="Cerrar sesión">
             <i class="bi bi-power"></i>

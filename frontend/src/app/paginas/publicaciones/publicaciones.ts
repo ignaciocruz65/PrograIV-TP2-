@@ -2,13 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../servicios/auth';
 import { PublicacionesService } from '../../servicios/publicaciones';
 import { Postear } from '../../componentes/postear/postear';
-import { RouterLink } from '@angular/router';
+// import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-publicaciones',
   standalone: true,
-  imports: [Postear, RouterLink], 
+  imports: [Postear], 
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css',
 })

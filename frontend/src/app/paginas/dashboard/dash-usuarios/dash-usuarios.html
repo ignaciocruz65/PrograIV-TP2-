@@ -1,0 +1,111 @@
+<div class="container py-4">
+    <h2 class="mb-4 text-gradient"><i class="bi bi-people-fill me-2"></i> Gestión de Usuarios</h2>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="glass-card p-4 shadow-sm">
+                <h4 class="text-white mb-3">Alta de Usuario</h4>
+                
+                <form [formGroup]="formUsuario" (ngSubmit)="crear()">
+                    <div class="mb-2">
+                        <input formControlName="nombre" class="form-control glass-input" placeholder="Nombre" [class.is-invalid]="campoInvalido('nombre')">
+                        <div class="invalid-feedback">El nombre es obligatorio</div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <input formControlName="apellido" class="form-control glass-input" placeholder="Apellido" [class.is-invalid]="campoInvalido('apellido')">
+                        <div class="invalid-feedback">El apellido es obligatorio</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <input type="email" formControlName="correo" class="form-control glass-input" placeholder="Correo electrónico" [class.is-invalid]="campoInvalido('correo')">
+                        <div class="invalid-feedback">Ingresa un correo válido</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <input formControlName="nombreUsuario" class="form-control glass-input" placeholder="Nombre de Usuario" [class.is-invalid]="campoInvalido('nombreUsuario')">
+                        <div class="invalid-feedback">El usuario es obligatorio</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <input type="password" formControlName="password" class="form-control glass-input" placeholder="Contraseña" [class.is-invalid]="campoInvalido('password')">
+                        <div class="invalid-feedback">Mínimo 8 caracteres</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <input type="password" formControlName="repetirPassword" class="form-control glass-input" placeholder="Repetir Contraseña" [class.is-invalid]="campoInvalido('repetirPassword')">
+                        <div class="invalid-feedback">Mínimo 8 caracteres</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label text-muted small mb-1">Fecha Nacimiento</label>
+                        <input type="date" formControlName="fechaNacimiento" class="form-control glass-input" [class.is-invalid]="campoInvalido('fechaNacimiento')">
+                        <div class="invalid-feedback">Obligatorio</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea formControlName="descripcionBreve" class="form-control glass-input" placeholder="Descripción breve" rows="2"></textarea>
+                    </div>
+
+                    <div class="mb-3 p-2 bg-dark bg-opacity-50 rounded border border-secondary">
+                        <label class="text-white small mb-1 d-block">Perfil:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" value="usuario" formControlName="perfil" id="rolUser">
+                            <label class="form-check-label text-light small" for="rolUser">Usuario</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" value="administrador" formControlName="perfil" id="rolAdmin">
+                            <label class="form-check-label text-warning small" for="rolAdmin">Administrador</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-arcade btn-primary w-100" [disabled]="cargando()">
+                        {{ cargando() ? 'Cargando...' : 'Crear Usuario' }}
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="glass-card p-4 shadow-sm overflow-auto">
+                <h4 class="text-white mb-3">Lista de Usuarios</h4>
+                <table class="table table-dark table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Perfil</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of usuarios()">
+                            <td>{{ user.nombre }}</td>
+                            <td>{{ user.apellido }}</td>
+                            <td>{{ user.correo }}</td>
+                            <td>
+                                <span class="badge" [class.bg-warning]="user.perfil === 'administrador'" [class.bg-secondary]="user.perfil === 'usuario'">
+                                    {{ user.perfil }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge" [class.bg-success]="user.activo" [class.bg-danger]="!user.activo">
+                                    {{ user.activo ? 'Habilitado' : 'Deshabilitado' }}
+                                </span>
+                            </td>
+                            <td>
+                                <button (click)="cambiarEstado(user)" class="btn btn-sm" 
+                                    [class.btn-danger]="user.activo"
+                                    [class.btn-success]="!user.activo">
+                                    {{ user.activo ? 'Deshabilitar' : 'Habilitar' }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,7 +10,7 @@ import { UsuariosModule } from '../usuarios/usuarios.module';
     JwtModule.register({
       global: true, 
       secret: process.env.JWT_SECRET || 'clave', 
-      signOptions: { expiresIn: '30s' },
+      signOptions: { expiresIn: '5m' },
     })
   ],
   controllers: [AuthController],

@@ -91,9 +91,9 @@ export class Login {
 
   ingresoRapido(rol: 'admin' | 'usuario') {
     if (rol === 'admin') {
-      this.formulario.patchValue({ usuarioOCorreo: 'ganley22', contrasena: 'Ganley12345' });
+      this.formulario.patchValue({ usuarioOCorreo: 'admin', contrasena: 'Admin123' });
     } else {
-      this.formulario.patchValue({ usuarioOCorreo: 'tengoquecrear', contrasena: 'Tengoquecrear12345' });
+      this.formulario.patchValue({ usuarioOCorreo: 'ganley22', contrasena: 'Ganley12345' });
     }
     this.enviar();
   }

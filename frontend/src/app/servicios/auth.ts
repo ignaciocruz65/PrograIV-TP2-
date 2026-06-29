@@ -28,11 +28,15 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private apiUrl = 'https://progra-iv-tp-2-six.vercel.app';
-  private temporizador: any;
   
+  private intervalo: any; // Cambiamos temporizador por intervalo
+
   // señal reactiva para almacenar el usuario actual
   usuarioActual = signal<UsuarioPublico | null>(null);
   cargandoGlobal = signal<boolean>(true);
+  
+  // NUEVO: señal para el reloj de la pantalla
+  tiempoRestante = signal<number>(0); 
 
   constructor() {
     const userJson = localStorage.getItem('usuario');
@@ -67,26 +71,38 @@ export class AuthService {
   }
 
   iniciarTemporizador() {
-    clearTimeout(this.temporizador); // limpiar reloj anterior
+    clearInterval(this.intervalo); // limpiar reloj anterior
     
-    // 600000 milisegundos = 10 minutos
-    this.temporizador = setTimeout(() => {
-      Swal.fire({
-        title: 'Tu sesión casi expira',
-        text: 'Te quedan 5 minutos. ¿Querés extender tu sesión?',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, extender',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.refrescarToken();
-        }else{
-          this.cerrarSesion();
-        }
-      });
-    }, 15000); 
-  }
+    // Seteamos la sesión en 5 minutos (300 segundos)
+    this.tiempoRestante.set(300); 
 
+    this.intervalo = setInterval(() => {
+      const actual = this.tiempoRestante() - 1;
+      this.tiempoRestante.set(actual);
+
+      // Cuando queden 150 segundos (2.5 minutos), tiramos la alerta
+      if (actual === 150) {
+        Swal.fire({
+          title: 'Tu sesión casi expira',
+          text: 'Te quedan 2.5 minutos. ¿Querés extender tu sesión?',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, extender',
+          cancelButtonText: 'No'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.refrescarToken();
+          } else {
+            this.cerrarSesion();
+          }
+        });
+      }
+
+      // Si el reloj llega a 0, lo echamos
+      if (actual <= 0) {
+        this.cerrarSesion();
+      }
+    }, 1000); // Se ejecuta cada 1 segundo
+  }
 
   refrescarToken() {
     const tokenViejo = this.getToken();
@@ -96,7 +112,7 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           localStorage.setItem('token', res.token); // reescribimos el viejo token 
-          this.iniciarTemporizador(); 
+          this.iniciarTemporizador(); // Esto reinicia el reloj a 300 de nuevo
         },
         error: (err) => {
           console.error('Error en el refrescar token:', err);
@@ -110,11 +126,14 @@ export class AuthService {
       this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, { usuarioOCorreo, password })
         .subscribe({
           next: (response) => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
             this.usuarioActual.set(response.usuario);
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             localStorage.setItem('token', response.token); 
-            
+
             this.iniciarTemporizador();
+            
             resolve(response.usuario);
           },
           error: (err) => {
@@ -142,7 +161,10 @@ export class AuthService {
     this.usuarioActual.set(null);
     localStorage.removeItem('usuario');
     localStorage.removeItem('token'); 
-    clearTimeout(this.temporizador);
+    
+    // FUNDAMENTAL: Apagamos el reloj al cerrar sesión
+    clearInterval(this.intervalo); 
+    this.tiempoRestante.set(0);
     
     this.router.navigate(['/login']);
   }

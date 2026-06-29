@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router'
+import { adminGuard } from './guards/admin.guard'
 
 export const routes: Routes = [
     { path: 'login', loadComponent: () => import('./paginas/login/login').then(c => c.Login) },
@@ -19,15 +20,15 @@ export const routes: Routes = [
         loadComponent: () =>
         import('./paginas/pagina-publicacion/pagina-pub').then(c => c.PaginaPublicacionComponent)
     },
+    {
+    path: 'dashboard/usuarios',
+    loadComponent: () => import('./paginas/dashboard/dash-usuarios/dash-usuarios').then(c => c.DashUsuariosComponent),
+    canActivate: [adminGuard]
+    },
     // {
-    //     path: 'dashboard/usuarios',
-    //     loadComponent: () => import('./paginas/dashboard/dashboard').then(c => c.Dashboard),
-    //     canActivate: [adminGuard]
-    // },
-    // {
-    //     path: 'dashboard/estadisticas',
-    //     loadComponent: () => import('./paginas/dashboard/dashboard').then(c => c.Dashboard),
-    //     canActivate: [adminGuard]
+    // path: 'dashboard/estadisticas',
+    // loadComponent: () => import('./paginas/dashboard/dashboard-estadisticas/dash-estadisticas').then(c => c.DashboardEstadisticas),
+    // canActivate: [adminGuard]
     // },
 
     { path: '', pathMatch: 'full', redirectTo: 'login' },

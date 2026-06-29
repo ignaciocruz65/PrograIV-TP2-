@@ -73,7 +73,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
     
-    if (usuario.activo === false) {
+    if (!usuario.activo) {
       throw new UnauthorizedException('Tu cuenta ha sido deshabilitada por un administrador.');
     }
 
@@ -123,9 +123,16 @@ export class AuthService {
   async autorizar(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      return { usuario: payload };
+      const usuario = await this.usuariosService.buscarPorCorreoOCuenta(payload.correo);
+      
+      if (!usuario) {
+        throw new UnauthorizedException('Token inválido x try ');
+      }
+
+      return { usuario: this.usuariosService.quitarContrasena(usuario) };
+      
     } catch (error) {
-      throw new UnauthorizedException('Token inválido');
+      throw new UnauthorizedException('Token inválido x catch');
     }
   }
 
@@ -145,23 +152,11 @@ export class AuthService {
 
   async refrescarToken(tokenViejo: string) {
     try {
+      const payload = await this.jwtService.verifyAsync(tokenViejo);
       
-      const payload = this.jwtService.decode(tokenViejo) as any;
-      
-      if (!payload) {
-        throw new Error('Token inválido');
-      }
-
-      // payload nuevo con token nuevo
-      const payloadNuevo = { 
-        sub: payload.sub,
-        nombreUsuario: payload.nombreUsuario,
-        correo: payload.correo,
-        perfil: payload.perfil
-      };
+      const { exp, iat, ...payloadLimpio } = payload;
       //firma
-      const tokenNuevo = this.jwtService.sign(payloadNuevo);
-
+      const tokenNuevo = await this.jwtService.signAsync(payloadLimpio);
       return { token: tokenNuevo };
       
     } catch (error) {

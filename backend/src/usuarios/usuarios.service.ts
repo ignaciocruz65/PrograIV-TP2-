@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,BadRequestException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {Usuario } from './usuario.shema';
 import { UsuarioPublico } from './usuarios.types';
 import * as crypto from 'crypto';
-
 @Injectable()
 export class UsuariosService {
     // inyeccion de el modelo de usuario de usuario.shema
@@ -13,10 +12,24 @@ export class UsuariosService {
     ) {}
 
     async crearDesdeAdmin(datos: any): Promise<UsuarioPublico> {
+        if (!datos.nombre || !datos.apellido || !datos.correo || !datos.nombreUsuario || !datos.password || !datos.fechaNacimiento) {
+            throw new BadRequestException('Faltan campos obligatorios');
+        }
+        const existe = await this.existeCorreoOCuenta(datos.correo, datos.nombreUsuario);
+        if (existe) throw new BadRequestException('El correo o nombre de usuario ya existen');
+
         const passwordHash = crypto.createHash('sha256').update(datos.password).digest('hex');
         const usuarioCreado = await this.usuarioModel.create({
-            ...datos,
-            passwordHash: passwordHash
+            nombre: datos.nombre,
+            apellido: datos.apellido,
+            correo: datos.correo.toLowerCase(), 
+            nombreUsuario: datos.nombreUsuario.toLowerCase(),
+            passwordHash,
+            fechaNacimiento: datos.fechaNacimiento,
+            descripcionBreve: datos.descripcionBreve || '',
+            perfil: datos.perfil || 'usuario',
+            imagenPerfilUrl: datos.imagenPerfilUrl || null,
+            activo: true 
         });
         return this.quitarContrasena(usuarioCreado.toObject());
     }
@@ -30,6 +43,8 @@ export class UsuariosService {
         return this.quitarContrasena(usuarioActualizado);
     }
 
+
+    
 
     //  / todo es asíncrono porque lo conectamos a mongodb 
     async crear(nuevoUsuario: any): Promise<UsuarioPublico> {

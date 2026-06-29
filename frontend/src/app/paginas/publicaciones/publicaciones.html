@@ -31,10 +31,10 @@
       </div>
 
       @for (item of servicioPub.publicaciones(); track item.id) {
-      <button class="btn btn-outline-light w-100 mt-3 d-flex justify-content-center align-items-center gap-2"
+      <!-- <small class="btn btn-outline-light w-100 mt-3 d-flex justify-content-center align-items-center gap-2"
         style="border-radius: 8px; border-color: rgba(255,255,255,0.2);" [routerLink]="['/publicacion', item.id]">
         <i class="bi bi-arrows-angle-expand"></i> Ver publicación completa
-      </button>
+      </small> -->
       <app-postear [post]="item"></app-postear>
       } @empty {
       <p class="text-center text-muted mt-5">Nadie publicó nada todavía.</p>

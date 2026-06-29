@@ -11,11 +11,18 @@
             </div>
         </div>
 
-        @if (soyDuenio || soyAdmin) {
-        <button class="btn btn-sm btn-outline-danger" (click)="borrarPost()">
-            <i class="bi bi-trash"></i>
-        </button>
-        }
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-primary" [routerLink]="['/publicacion', post.id]"
+                aria-label="Ver publicación completa de {{ post.nombreUsuario }}" title="Ver publicación completa">
+                <i class="bi bi-arrows-angle-expand"></i>
+            </button>
+
+            @if (soyDuenio || soyAdmin) {
+            <button class="btn btn-sm btn-outline-danger" (click)="borrarPost()">
+                <i class="bi bi-trash"></i>
+            </button>
+            }
+        </div>
     </div>
 
     <div class="mb-3">

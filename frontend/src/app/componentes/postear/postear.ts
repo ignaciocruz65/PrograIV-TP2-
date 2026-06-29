@@ -1,12 +1,13 @@
 import { Component, Input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../servicios/auth';
 import { PublicacionesService, Publicacion } from '../../servicios/publicaciones';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-postear',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './postear.html',
   styleUrl: './postear.css',
 })
