@@ -32,21 +32,30 @@ export class PublicacionesService {
     if (usuarioIdFiltro) {
       filtro.usuarioId = usuarioIdFiltro;
     }
-    const orden: any = ordenarPor === 'likes' ? { likes: -1 } : { createdAt: -1 };
-
-    // buscamos las publicaciones
-      const posteos = await this.publicacionModel.find(filtro)
-      .sort(orden)
-      .skip(salto)
-      .limit(limite)
-      .lean();
+    let posteos: any[];
+    if (ordenarPor === 'likes') {
+      posteos = await this.publicacionModel.aggregate([
+        { $match: filtro },
+        { $addFields: { cantidadLikes: { $size: '$likes' } } },
+        { $sort: { cantidadLikes: -1, createdAt: -1 } },
+        { $skip: salto },
+        { $limit: limite },
+        { $project: { cantidadLikes: 0 } }
+      ]);
+    } else {
+      posteos = await this.publicacionModel.find(filtro)
+        .sort({ createdAt: -1 })
+        .skip(salto)
+        .limit(limite)
+        .lean();
+    }
 
     return posteos.map((post: any) => ({
       ...post,
       id: post._id.toString() 
     }));
   }
-
+  
   async darDeBaja(idPublicacion: string, usuarioIdSolicitante: string, perfilSolicitante: string): Promise<void> {
     const publicacion = await this.publicacionModel.findById(idPublicacion);
     if (!publicacion || !publicacion.activo) {
@@ -137,10 +146,10 @@ export class PublicacionesService {
   async getComentariosTotales(desde: Date, hasta: Date) {
     return this.publicacionModel.aggregate([
       { $unwind: "$comentarios" },
-      { $match: { "comentarios.createdAt": { $gte: desde, $lte: hasta } } },
+      { $match: { "comentarios.fecha": { $gte: desde, $lte: hasta } } },
       { 
         $group: { 
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$comentarios.createdAt" } }, 
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$comentarios.fecha" } }, 
           cantidad: { $sum: 1 } 
         } 
       },
@@ -151,8 +160,8 @@ export class PublicacionesService {
   async getComentariosPorPublicacion(desde: Date, hasta: Date) {
     return this.publicacionModel.aggregate([
       { $unwind: "$comentarios" },
-      { $match: { "comentarios.createdAt": { $gte: desde, $lte: hasta } } },
-      { $group: { _id: "$_id", cantidad: { $sum: 1 } } },
+      { $match: { "comentarios.fecha": { $gte: desde, $lte: hasta } } },
+      { $group: { _id: "$_id", cantidad: { $sum: 1 }, titulo: { $first: "$titulo" } } },
       { $sort: { cantidad: -1 } },
       { $limit: 5 }
     ]);

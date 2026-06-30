@@ -6,7 +6,8 @@ import { AuthService } from './auth';
 export class EstadisticasService {
     private http = inject(HttpClient);
     private authService = inject(AuthService);
-    private apiUrl = 'https://progra-iv-tp-2-six.vercel.app/dashboard/estadisticas'; 
+    private apiUrl = 'https://progra-iv-tp-2-six.vercel.app/dashboard/estadisticas';
+    //private apiUrl = 'http://localhost:3000/dashboard/estadisticas';
 
     private obtenerHeaders() {
         const token = this.authService.getToken(); 

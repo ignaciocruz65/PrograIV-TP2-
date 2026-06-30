@@ -1,4 +1,12 @@
 import { Component, Input, inject, OnInit } from '@angular/core';
+//PIPES
+import { FormatoLikesPipe } from '../../shared/pipes/formato-likes.pipe';
+import { FechaRelativaPipe } from '../../shared/pipes/fecha-relativa.pipe';
+import { LimpiarTextoPipe } from '../../shared/pipes/texto-seguro.pipe';
+// DIRECTIVAS
+import { ZoomHoverDirective } from '../../shared/directives/zoom-hover';
+import { IluminarInputDirective } from '../../shared/directives/iluminar-input';
+import { ModoFocusDirective } from '../../shared/directives/modo-focus';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../servicios/auth';
@@ -7,7 +15,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-postear',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormatoLikesPipe, FechaRelativaPipe, LimpiarTextoPipe, ZoomHoverDirective, IluminarInputDirective, ModoFocusDirective],
   templateUrl: './postear.html',
   styleUrl: './postear.css',
 })

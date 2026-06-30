@@ -5,8 +5,6 @@ import { PublicacionesService } from './publicaciones.service';
 import { Publicacion, PublicacionSchema } from './publicacion.schema'; 
 import { EstadisticasController } from './estadisticas.controller';
 
-
-
 @Module({
   imports: [
     MongooseModule.forFeature([

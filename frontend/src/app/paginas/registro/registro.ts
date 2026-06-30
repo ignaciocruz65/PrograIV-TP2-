@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../servicios/auth';
 import Swal from 'sweetalert2';
+import { IluminarInputDirective } from '../../shared/directives/iluminar-input';
 
 // patron de la contraseña
 const patronContrasena = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
@@ -10,7 +11,7 @@ const patronContrasena = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, IluminarInputDirective],
   templateUrl: './registro.html',
 })
 export class Registro {

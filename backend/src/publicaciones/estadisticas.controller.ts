@@ -2,7 +2,7 @@ import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { AdminGuard } from '../auth/admin.guard'; 
 
-@Controller('admin/estadisticas')
+@Controller('dashboard/estadisticas')
 @UseGuards(AdminGuard) 
 export class EstadisticasController {
     constructor(private readonly publicacionesService: PublicacionesService) {}

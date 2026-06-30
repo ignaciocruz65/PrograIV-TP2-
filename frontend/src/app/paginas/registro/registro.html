@@ -10,7 +10,7 @@
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label small text-uppercase fw-bold">Nombre</label>
-          <input type="text" maxlength="20" formControlName="nombre" class="form-control glass-input" placeholder="Juan" [class.is-invalid]="invalido('nombre')">
+          <input type="text" maxlength="20" formControlName="nombre" class="form-control glass-input" appIluminarInput placeholder="Juan" [class.is-invalid]="invalido('nombre')">
           @if (formulario.controls.nombre.invalid && (formulario.controls.nombre.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">Solo se permiten letras y un máximo de 20 caracteres.</small>
           }
@@ -18,7 +18,7 @@
 
         <div class="col-md-6">
           <label class="form-label small text-uppercase fw-bold">Apellido</label>
-          <input type="text" maxlength="20" formControlName="apellido" class="form-control glass-input" placeholder="Pérez" [class.is-invalid]="invalido('apellido')">
+          <input type="text" maxlength="20" formControlName="apellido" class="form-control glass-input" appIluminarInput placeholder="Pérez" [class.is-invalid]="invalido('apellido')">
           @if (formulario.controls.apellido.invalid && (formulario.controls.apellido.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">Solo se permiten letras y un máximo de 20 caracteres.</small>
           }
@@ -26,7 +26,7 @@
 
         <div class="col-md-6">
           <label class="form-label small text-uppercase fw-bold">Correo Electrónico</label>
-          <input type="email" maxlength="50" formControlName="correo" class="form-control glass-input" placeholder="juan@ejemplo.com" [class.is-invalid]="invalido('correo')">
+          <input type="email" maxlength="50" formControlName="correo" class="form-control glass-input" appIluminarInput placeholder="juan@ejemplo.com" [class.is-invalid]="invalido('correo')">
           @if (formulario.controls.correo.invalid && (formulario.controls.correo.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">Ingrese un correo electrónico válido y un máximo de 50 caracteres.</small>
           }
@@ -34,7 +34,7 @@
 
         <div class="col-md-6">
           <label class="form-label small text-uppercase fw-bold">Nombre de Usuario</label>
-          <input type="text" maxlength="25" formControlName="nombreUsuario" class="form-control glass-input" placeholder="juanperez123" [class.is-invalid]="invalido('nombreUsuario')">
+          <input type="text" maxlength="25" formControlName="nombreUsuario" class="form-control glass-input" appIluminarInput placeholder="juanperez123" [class.is-invalid]="invalido('nombreUsuario')">
           @if (formulario.controls.nombreUsuario.invalid && (formulario.controls.nombreUsuario.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">Solo se permiten letras, números y guiones bajos.</small>
           }
@@ -42,7 +42,7 @@
 
         <div class="col-md-6">
           <label class="form-label small text-uppercase fw-bold">Contraseña</label>
-          <input type="password" maxlength="20" formControlName="password" class="form-control glass-input" placeholder="••••••••" [class.is-invalid]="invalido('password')">
+          <input type="password" maxlength="20" formControlName="password" class="form-control glass-input" appIluminarInput placeholder="••••••••" [class.is-invalid]="invalido('password')">
           @if (formulario.controls.password.invalid && (formulario.controls.password.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">Mínimo 8 caracteres, una mayúscula y un número.</small>
           }
@@ -54,7 +54,7 @@
             type="password"
             maxlength="20"
             formControlName="repetirPassword"
-            class="form-control glass-input"
+            class="form-control glass-input" appIluminarInput
             placeholder="••••••••"
             [class.is-invalid]="invalido('repetirPassword') || (formulario.controls.repetirPassword.touched && formulario.controls.password.value !== formulario.controls.repetirPassword.value)"
           >
@@ -68,7 +68,7 @@
 
         <div class="col-md-6">
           <label class="form-label small text-uppercase fw-bold">Fecha de Nacimiento</label>
-          <input type="date" formControlName="fechaNacimiento" class="form-control glass-input" [class.is-invalid]="invalido('fechaNacimiento')">
+          <input type="date" formControlName="fechaNacimiento" class="form-control glass-input" appIluminarInput [class.is-invalid]="invalido('fechaNacimiento')">
           @if (formulario.controls.fechaNacimiento.errors?.['required'] && (formulario.controls.fechaNacimiento.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">Por favor, seleccione su fecha de nacimiento.</small>
           }
@@ -84,7 +84,7 @@
 
         <div class="col-12">
           <label class="form-label small text-uppercase fw-bold">Breve Descripción</label>
-          <textarea maxlength="200" formControlName="descripcionBreve" class="form-control glass-input" rows="3" placeholder="Cuéntanos un poco sobre ti..."></textarea>
+          <textarea maxlength="200" formControlName="descripcionBreve" class="form-control glass-input" appIluminarInput rows="3" placeholder="Cuéntanos un poco sobre ti..."></textarea>
           @if (formulario.controls.descripcionBreve.invalid && (formulario.controls.descripcionBreve.touched || formularioEnviado())) {
             <small class="text-danger mt-2 d-block">La descripción es obligatoria y debe tener un máximo de 200 caracteres.</small>
           }
