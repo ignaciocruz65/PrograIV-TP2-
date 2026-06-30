@@ -51,6 +51,13 @@
             Sesión: {{ servicioAuth.tiempoRestante() * 1000 | date:'mm:ss' }}
           </div>
           }
+          @if (servicioAuth.usuarioActual()?.perfil === 'administrador') {
+          <li class="nav-item">
+            <a class="nav-link text-warning" routerLink="/dashboard/estadisticas">
+              <i class="bi bi-graph-up"></i> Estadísticas
+            </a>
+          </li>
+          }
           <button (click)="confirmarCerrarSesion()" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
             aria-label="Cerrar sesión">
             <i class="bi bi-power"></i>

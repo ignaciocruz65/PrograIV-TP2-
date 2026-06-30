@@ -1,0 +1,50 @@
+<div class="container py-4">
+    <h2 class="mb-4 text-gradient"><i class="bi bi-bar-chart-fill me-2"></i> Estadísticas Globales</h2>
+
+    <div class="glass-card p-4 shadow-sm mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label text-white small">Fecha Desde</label>
+                <input type="date" class="form-control glass-input text-white" [ngModel]="fechaDesde()" (ngModelChange)="fechaDesde.set($event)">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-white small">Fecha Hasta</label>
+                <input type="date" class="form-control glass-input text-white" [ngModel]="fechaHasta()" (ngModelChange)="fechaHasta.set($event)">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-arcade btn-primary w-100" (click)="cargarEstadisticas()">
+                    <i class="bi bi-arrow-clockwise"></i> Actualizar Gráficos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="glass-card p-3 shadow-sm h-100">
+                <h5 class="text-white text-center mb-3">Publicaciones por Usuario</h5>
+                <div style="height: 300px;">
+                    <canvas #chartUsuarios></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="glass-card p-3 shadow-sm h-100">
+                <h5 class="text-white text-center mb-3">Flujo de Comentarios</h5>
+                <div style="height: 300px;">
+                    <canvas #chartComentarios></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 mx-auto">
+            <div class="glass-card p-3 shadow-sm h-100">
+                <h5 class="text-white text-center mb-3">Top Publicaciones Comentadas</h5>
+                <div style="height: 350px;">
+                    <canvas #chartPubComentarios></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

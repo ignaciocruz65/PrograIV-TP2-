@@ -25,11 +25,11 @@ export const routes: Routes = [
     loadComponent: () => import('./paginas/dashboard/dash-usuarios/dash-usuarios').then(c => c.DashUsuariosComponent),
     canActivate: [adminGuard]
     },
-    // {
-    // path: 'dashboard/estadisticas',
-    // loadComponent: () => import('./paginas/dashboard/dashboard-estadisticas/dash-estadisticas').then(c => c.DashboardEstadisticas),
-    // canActivate: [adminGuard]
-    // },
+    {
+    path: 'dashboard/estadisticas',
+    loadComponent: () => import('./paginas/dashboard/dash-estadisticas/dash-estadisticas').then(c => c.DashEstadisticasComponent),
+    canActivate: [adminGuard]
+    },
 
     { path: '', pathMatch: 'full', redirectTo: 'login' },
     { path: '**', redirectTo: 'login' }

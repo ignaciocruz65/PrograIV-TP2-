@@ -123,16 +123,16 @@ export class AuthService {
   async autorizar(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token);
+      if (!payload || !payload.correo) throw new Error('Token corrupto');
+
       const usuario = await this.usuariosService.buscarPorCorreoOCuenta(payload.correo);
-      
-      if (!usuario) {
-        throw new UnauthorizedException('Token inválido x try ');
+      if (!usuario || !usuario.activo) {
+        throw new Error('Usuario inexistente o inactivo');
       }
 
       return { usuario: this.usuariosService.quitarContrasena(usuario) };
-      
     } catch (error) {
-      throw new UnauthorizedException('Token inválido x catch');
+      throw new UnauthorizedException('Tu sesión expiró o el token es inválido.');
     }
   }
 

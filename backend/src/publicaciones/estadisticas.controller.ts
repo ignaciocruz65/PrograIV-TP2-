@@ -1,28 +1,33 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Publicacion } from './publicacion.schema';
-import { AdminGuard } from '../auth/admin.guard';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { PublicacionesService } from './publicaciones.service';
+import { AdminGuard } from '../auth/admin.guard'; 
 
-@Controller('estadisticas')
-@UseGuards(AdminGuard)
+@Controller('admin/estadisticas')
+@UseGuards(AdminGuard) 
 export class EstadisticasController {
-    constructor(
-        @InjectModel(Publicacion.name) private publicacionModel: Model<Publicacion>,
-    ) {}
+    constructor(private readonly publicacionesService: PublicacionesService) {}
 
-    @Get('totales')
-    async getTotales() {
-        const total = await this.publicacionModel.countDocuments();
-        return { totales: total };
+    @Get('publicaciones-por-usuario')
+    async getPostsUsuario(@Query('desde') desde: string, @Query('hasta') hasta: string) {
+        const fechaDesde = new Date(desde);
+        const fechaHasta = new Date(new Date(hasta).getTime() + 86400000); 
+        
+        return this.publicacionesService.getPublicacionesPorUsuario(fechaDesde, fechaHasta);
     }
 
-    @Get('top-likes')
-    async getTopLikes() {
-    return this.publicacionModel.aggregate([
-        { $project: { titulo: 1, cantidadLikes: { $size: "$likes" } } },
-        { $sort: { cantidadLikes: -1 } },
-        { $limit: 5 }
-        ]);
+    @Get('comentarios-totales')
+    async getComentariosTotales(@Query('desde') desde: string, @Query('hasta') hasta: string) {
+        const fechaDesde = new Date(desde);
+        const fechaHasta = new Date(new Date(hasta).getTime() + 86400000);
+        
+        return this.publicacionesService.getComentariosTotales(fechaDesde, fechaHasta);
+    }
+
+    @Get('comentarios-por-publicacion')
+    async getComentariosPost(@Query('desde') desde: string, @Query('hasta') hasta: string) {
+        const fechaDesde = new Date(desde);
+        const fechaHasta = new Date(new Date(hasta).getTime() + 86400000);
+        
+        return this.publicacionesService.getComentariosPorPublicacion(fechaDesde, fechaHasta);
     }
 }

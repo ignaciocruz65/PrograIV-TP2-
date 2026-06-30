@@ -39,9 +39,8 @@ export class DashUsuariosComponent implements OnInit {
       correo: ['', [Validators.required, Validators.email]],
       nombreUsuario: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      repetirPassword: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
-      descripcionBreve: [''],
+      descripcionBreve: ['', Validators.required],
       perfil: ['usuario', Validators.required]
     })
   }

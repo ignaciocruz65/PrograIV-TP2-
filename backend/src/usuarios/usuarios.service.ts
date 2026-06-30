@@ -15,22 +15,31 @@ export class UsuariosService {
         if (!datos.nombre || !datos.apellido || !datos.correo || !datos.nombreUsuario || !datos.password || !datos.fechaNacimiento) {
             throw new BadRequestException('Faltan campos obligatorios');
         }
-        const existe = await this.existeCorreoOCuenta(datos.correo, datos.nombreUsuario);
+
+        const correoLimpio = datos.correo.trim().toLowerCase();
+        const usuarioLimpio = datos.nombreUsuario.trim().toLowerCase();
+
+        const existe = await this.existeCorreoOCuenta(correoLimpio, usuarioLimpio);
         if (existe) throw new BadRequestException('El correo o nombre de usuario ya existen');
 
         const passwordHash = crypto.createHash('sha256').update(datos.password).digest('hex');
-        const usuarioCreado = await this.usuarioModel.create({
+
+        const usuarioData: any = {
             nombre: datos.nombre,
             apellido: datos.apellido,
-            correo: datos.correo.toLowerCase(), 
-            nombreUsuario: datos.nombreUsuario.toLowerCase(),
+            correo: correoLimpio,
+            nombreUsuario: usuarioLimpio,
             passwordHash,
             fechaNacimiento: datos.fechaNacimiento,
-            descripcionBreve: datos.descripcionBreve || '',
             perfil: datos.perfil || 'usuario',
-            imagenPerfilUrl: datos.imagenPerfilUrl || null,
-            activo: true 
+            activo: true
+        };
+
+        const usuarioCreado = await this.usuarioModel.create({
+            ...usuarioData,
         });
+
+        
         return this.quitarContrasena(usuarioCreado.toObject());
     }
 
@@ -42,9 +51,6 @@ export class UsuariosService {
         ).lean();
         return this.quitarContrasena(usuarioActualizado);
     }
-
-
-    
 
     //  / todo es asíncrono porque lo conectamos a mongodb 
     async crear(nuevoUsuario: any): Promise<UsuarioPublico> {
@@ -58,6 +64,8 @@ export class UsuariosService {
     }
 
     async buscarPorCorreoOCuenta(textoIngresado: string): Promise<any | null> {
+        if (!textoIngresado) return null;
+
         const textoLimpio = textoIngresado.trim().toLowerCase();
 
         return this.usuarioModel.findOne({
@@ -69,6 +77,9 @@ export class UsuariosService {
     }
 
     async existeCorreoOCuenta(correo: string, nombreUsuario: string): Promise<boolean> {
+        if (!correo || !nombreUsuario) return false;
+
+
         const correoLimpio = correo.trim().toLowerCase();
         const usuarioLimpio = nombreUsuario.trim().toLowerCase();
 
@@ -85,7 +96,7 @@ export class UsuariosService {
     quitarContrasena(usuario: any): UsuarioPublico {
         // retornamos los datos del usuario sin la contraseña
         return {
-            id: usuario._id.toString(),
+            id: usuario._id.toString() || usuario.id,
             nombre: usuario.nombre,
             apellido: usuario.apellido,
             correo: usuario.correo,

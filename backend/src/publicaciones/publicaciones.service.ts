@@ -124,4 +124,38 @@ export class PublicacionesService {
     const { data: urlData } = this.supabase.storage.from('publicacionesimgs').getPublicUrl(nombreArchivo);
     return urlData.publicUrl;
   }
+
+  // filtramos x fecha -> agrupamos nombre usuario y sumamos 1 por cada post -> ordenamos de mayor a menor
+  async getPublicacionesPorUsuario(desde: Date, hasta: Date) {
+    return this.publicacionModel.aggregate([
+      { $match: { createdAt: { $gte: desde, $lte: hasta } } },
+      { $group: { _id: "$nombreUsuario", cantidad: { $sum: 1 } } },
+      { $sort: { cantidad: -1 } }
+    ]);
+  }
+  // desarmarmamos -> filtramos commentarios x fecha -> agrupamos por dia -> ordenamos cronológico
+  async getComentariosTotales(desde: Date, hasta: Date) {
+    return this.publicacionModel.aggregate([
+      { $unwind: "$comentarios" },
+      { $match: { "comentarios.createdAt": { $gte: desde, $lte: hasta } } },
+      { 
+        $group: { 
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$comentarios.createdAt" } }, 
+          cantidad: { $sum: 1 } 
+        } 
+      },
+      { $sort: { _id: 1 } }
+    ]);
+  }
+  // group x postid -> orden top 5  
+  async getComentariosPorPublicacion(desde: Date, hasta: Date) {
+    return this.publicacionModel.aggregate([
+      { $unwind: "$comentarios" },
+      { $match: { "comentarios.createdAt": { $gte: desde, $lte: hasta } } },
+      { $group: { _id: "$_id", cantidad: { $sum: 1 } } },
+      { $sort: { cantidad: -1 } },
+      { $limit: 5 }
+    ]);
+  }
+
 }

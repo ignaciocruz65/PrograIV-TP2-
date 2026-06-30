@@ -33,18 +33,21 @@
                     </div>
 
                     <div class="mb-2">
-                        <input type="password" formControlName="repetirPassword" class="form-control glass-input" placeholder="Repetir Contraseña" [class.is-invalid]="campoInvalido('repetirPassword')">
-                        <div class="invalid-feedback">Mínimo 8 caracteres</div>
-                    </div>
-
-                    <div class="mb-2">
                         <label class="form-label text-muted small mb-1">Fecha Nacimiento</label>
                         <input type="date" formControlName="fechaNacimiento" class="form-control glass-input" [class.is-invalid]="campoInvalido('fechaNacimiento')">
                         <div class="invalid-feedback">Obligatorio</div>
                     </div>
 
                     <div class="mb-3">
-                        <textarea formControlName="descripcionBreve" class="form-control glass-input" placeholder="Descripción breve" rows="2"></textarea>
+                        <textarea 
+                            formControlName="descripcionBreve" 
+                            class="form-control glass-input" 
+                            [class.is-invalid]="campoInvalido('descripcionBreve')"
+                            placeholder="Descripción breve (mínimo 5 caracteres)" 
+                            rows="2">
+                        </textarea>
+                        <div class="invalid-feedback">La descripcion es obligatoria</div>
+
                     </div>
 
                     <div class="mb-3 p-2 bg-dark bg-opacity-50 rounded border border-secondary">

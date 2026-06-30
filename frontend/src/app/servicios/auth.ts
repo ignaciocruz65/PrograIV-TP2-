@@ -29,7 +29,7 @@ export class AuthService {
   private router = inject(Router);
   private apiUrl = 'https://progra-iv-tp-2-six.vercel.app';
   
-  private intervalo: any; // Cambiamos temporizador por intervalo
+  private intervalo: any; 
 
   // señal reactiva para almacenar el usuario actual
   usuarioActual = signal<UsuarioPublico | null>(null);
@@ -53,19 +53,16 @@ export class AuthService {
       return;
     }
 
-    // preguntamos en el back
     this.http.post<{usuario: UsuarioPublico}>(`${this.apiUrl}/auth/autorizar`, { token })
       .subscribe({
         next: (res) => {
           this.usuarioActual.set(res.usuario);
-          this.iniciarTemporizador(); // empieza reloj
-          console.log('Token válido:', res);
+          this.iniciarTemporizador(); 
           this.cargandoGlobal.set(false);
         },
-        error: (err) => {
-          console.error('Error en el validar token inicial:', err);
+        error: () => {
           this.cargandoGlobal.set(false);
-          this.cerrarSesion(); // cerrado
+          this.cerrarSesion(); 
         }
       });
   }
