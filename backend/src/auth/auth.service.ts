@@ -72,7 +72,7 @@ export class AuthService {
     if (!usuario) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-    
+    //chequeo si esta deshabilitado
     if (!usuario.activo) {
       throw new UnauthorizedException('Tu cuenta ha sido deshabilitada por un administrador.');
     }

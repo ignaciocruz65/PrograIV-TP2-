@@ -27,7 +27,7 @@ Chart.register(...registerables);
     private charts: Chart[] = []; 
 
     ngAfterViewInit() {
-        setTimeout(() => { // Esperamos 200ms para asegurar que el DOM está listo
+        setTimeout(() => { // esperar a que carguen 
         this.cargarEstadisticas();
         }, 200);
     }

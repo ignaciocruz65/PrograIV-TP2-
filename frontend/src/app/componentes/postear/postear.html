@@ -41,7 +41,7 @@
         <button class="btn btn-sm" [class.btn-danger]="yaLeDiLike" [class.btn-outline-danger]="!yaLeDiLike"
             (click)="darQuitarLike()">
             <i class="bi" [class.bi-heart-fill]="yaLeDiLike" [class.bi-heart]="!yaLeDiLike"></i>
-            <span class="ms-1">{{ post.likes.length | formatoLikes }}</span>
+            <span class="ms-1">{{ (post.likes.length + 1500) | formatoLikes }}</span>
         </button>
 
         <div class="input-group mt-3">
@@ -62,6 +62,7 @@
         <div class="bg-dark p-2 rounded mb-2" appZoomHover>
             <span class="text-primary fw-bold me-2">@{{ comentario.nombreUsuario }}:</span>
             <span class="text-light">{{ comentario.texto | limpiarTexto }}</span>
+            <small class="d-flex justify-content-end-block text-muted">{{ comentario.fecha | fechaRelativa }}</small>
         </div>
         }
     </div>

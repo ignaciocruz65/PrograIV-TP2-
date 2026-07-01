@@ -2,8 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'limpiarTexto', standalone: true })
 export class LimpiarTextoPipe implements PipeTransform {
-    transform(value: string): string {
-        if (!value) return '';
-        return value.replace(/<[^>]*>/g, '');
+    transform(valor: string): string {
+        if (!valor) return '';
+        return valor.replace(/<[^>]*>/g, '');
     }
 }

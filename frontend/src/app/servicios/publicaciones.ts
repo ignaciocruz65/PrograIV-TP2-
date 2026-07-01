@@ -10,7 +10,7 @@ export type Publicacion = {
   usuarioId: string;
   nombreUsuario: string;
   likes: string[];
-  comentarios: { id?: string, nombreUsuario: string, texto: string, modificado?: boolean }[];
+  comentarios: { id?: string, nombreUsuario: string, texto: string,fecha: string, modificado?: boolean }[];
   createdAt: string;
 };
 

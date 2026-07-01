@@ -93,8 +93,7 @@ export class UsuariosService {
 
     async existeCorreoOCuenta(correo: string, nombreUsuario: string): Promise<boolean> {
         if (!correo || !nombreUsuario) return false;
-
-
+        
         const correoLimpio = correo.trim().toLowerCase();
         const usuarioLimpio = nombreUsuario.trim().toLowerCase();
 
