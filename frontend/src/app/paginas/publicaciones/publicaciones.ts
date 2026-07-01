@@ -2,13 +2,16 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../servicios/auth';
 import { PublicacionesService } from '../../servicios/publicaciones';
 import { Postear } from '../../componentes/postear/postear';
-// import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+
+import { IluminarInputDirective } from '../../shared/directives/iluminar-input';
+import { ZoomHoverDirective } from '../../shared/directives/zoom-hover';
+
 
 @Component({
   selector: 'app-publicaciones',
   standalone: true,
-  imports: [Postear], 
+  imports: [Postear, IluminarInputDirective, ZoomHoverDirective], 
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css',
 })

@@ -2,15 +2,15 @@
   <div class="row justify-content-center">
     <div class="col-lg-8">
 
-      <div class="glass-card p-4 shadow-sm mb-5 border border-primary">
+      <div class="glass-card p-4 shadow-sm mb-5 border border-primary" appZoomHover>
         <h4 class="mb-3">¿Qué estás pensando?</h4>
 
         <form (submit)="enviarPublicacion($event)">
           <div class="mb-3">
             <input type="text" name="titulo" class="form-control mb-2 bg-dark text-white"
-              placeholder="Título de tu post...">
+              placeholder="Título de tu post..." appIluminarInput>
             <textarea name="descripcion" class="form-control bg-dark text-white" rows="3"
-              placeholder="Escribí tu mensaje acá..."></textarea>
+              placeholder="Escribí tu mensaje acá..." appIluminarInput></textarea>
           </div>
 
           <div class="d-flex justify-content-between align-items-center">
@@ -31,10 +31,6 @@
       </div>
 
       @for (item of servicioPub.publicaciones(); track item.id) {
-      <!-- <small class="btn btn-outline-light w-100 mt-3 d-flex justify-content-center align-items-center gap-2"
-        style="border-radius: 8px; border-color: rgba(255,255,255,0.2);" [routerLink]="['/publicacion', item.id]">
-        <i class="bi bi-arrows-angle-expand"></i> Ver publicación completa
-      </small> -->
       <app-postear [post]="item"></app-postear>
       } @empty {
       <p class="text-center text-muted mt-5">Nadie publicó nada todavía.</p>

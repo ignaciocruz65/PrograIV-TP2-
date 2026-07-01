@@ -34,9 +34,8 @@ export class AuthService {
   // señal reactiva para almacenar el usuario actual
   usuarioActual = signal<UsuarioPublico | null>(null);
   cargandoGlobal = signal<boolean>(true);
-  
-  // NUEVO: señal para el reloj de la pantalla
-  tiempoRestante = signal<number>(0); 
+  private readonly DURACION_SESION = 300;
+  tiempoRestante = signal<number>(this.DURACION_SESION); 
 
   constructor() {
     const userJson = localStorage.getItem('usuario');
@@ -52,7 +51,7 @@ export class AuthService {
       this.cargandoGlobal.set(false);
       return;
     }
-    
+
     this.http.post<{usuario: UsuarioPublico}>(`${this.apiUrl}/auth/autorizar`, { token })
       .subscribe({
         next: (res) => {
@@ -70,14 +69,34 @@ export class AuthService {
   iniciarTemporizador() {
     clearInterval(this.intervalo); // limpiar reloj anterior
     
-    // Seteamos la sesión en 5 minutos (300 segundos)
-    this.tiempoRestante.set(300); 
+    let inicioSesionStr = sessionStorage.getItem('inicioSesion');
+    let inicioSesion: number;
 
+    if (!inicioSesionStr) {
+      // es una nueva sesión
+      inicioSesion = Date.now();
+      sessionStorage.setItem('inicioSesion', inicioSesion.toString());
+      this.tiempoRestante.set(this.DURACION_SESION);
+    } else {
+      // sí hay inicio guardado calculamos el tiempo transcurrido
+      inicioSesion = parseInt(inicioSesionStr, 10);
+      const transcurrido = Math.floor((Date.now() - inicioSesion) / 1000);
+      const restante = this.DURACION_SESION - transcurrido;
+
+      if (restante <= 0) {
+        this.cerrarSesion();
+        return;
+      }
+
+      //  tiempo real
+      this.tiempoRestante.set(restante);
+    }
+
+    // iniciamos el intervalo para actualizar cada segundo
     this.intervalo = setInterval(() => {
       const actual = this.tiempoRestante() - 1;
       this.tiempoRestante.set(actual);
 
-      // Cuando queden 150 segundos (2.5 minutos), tiramos la alerta
       if (actual === 150) {
         Swal.fire({
           title: 'Tu sesión casi expira',
@@ -94,11 +113,11 @@ export class AuthService {
         });
       }
 
-      // Si el reloj llega a 0, lo echamos
+      // no tiempo, cerramos sesión
       if (actual <= 0) {
         this.cerrarSesion();
       }
-    }, 1000); // Se ejecuta cada 1 segundo
+    }, 1000);
   }
 
   refrescarToken() {
@@ -109,7 +128,7 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           localStorage.setItem('token', res.token); // reescribimos el viejo token 
-          this.iniciarTemporizador(); // Esto reinicia el reloj a 300 de nuevo
+          this.iniciarTemporizador(); 
         },
         error: (err) => {
           console.error('Error en el refrescar token:', err);
@@ -159,7 +178,6 @@ export class AuthService {
     localStorage.removeItem('usuario');
     localStorage.removeItem('token'); 
     
-    // FUNDAMENTAL: Apagamos el reloj al cerrar sesión
     clearInterval(this.intervalo); 
     this.tiempoRestante.set(0);
     

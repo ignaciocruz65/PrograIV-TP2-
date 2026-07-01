@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe} from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './servicios/auth';
 import Swal from 'sweetalert2';
@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, CommonModule],
+  imports: [RouterOutlet, RouterLink, CommonModule, DatePipe],
   templateUrl: './app.html',
 })
 export class App implements OnInit {
