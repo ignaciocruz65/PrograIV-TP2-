@@ -6,6 +6,8 @@ import Swal from 'sweetalert2'
 import { Router } from '@angular/router'
 import { AuthService } from '../../../servicios/auth'
 
+const patronContrasena = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+
 @Component({
   selector: 'app-dash-usuarios',
   standalone: true,
@@ -38,7 +40,7 @@ export class DashUsuariosComponent implements OnInit {
       apellido: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
       nombreUsuario: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(patronContrasena)]],
       fechaNacimiento: ['', Validators.required],
       descripcionBreve: ['', Validators.required],
       perfil: ['usuario', Validators.required]
