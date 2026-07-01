@@ -66,13 +66,13 @@ export class AuthService {
       });
   }
 
-  iniciarTemporizador() {
+  iniciarTemporizador(reset: boolean = true) {
     clearInterval(this.intervalo); // limpiar reloj anterior
     
     let inicioSesionStr = sessionStorage.getItem('inicioSesion');
     let inicioSesion: number;
 
-    if (!inicioSesionStr) {
+    if (!inicioSesionStr || reset) {
       // es una nueva sesión
       inicioSesion = Date.now();
       sessionStorage.setItem('inicioSesion', inicioSesion.toString());
@@ -128,7 +128,7 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           localStorage.setItem('token', res.token); // reescribimos el viejo token 
-          this.iniciarTemporizador(); 
+          this.iniciarTemporizador(true); 
         },
         error: (err) => {
           console.error('Error en el refrescar token:', err);
@@ -148,7 +148,7 @@ export class AuthService {
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
             localStorage.setItem('token', response.token); 
 
-            this.iniciarTemporizador();
+            this.iniciarTemporizador(true);
             
             resolve(response.usuario);
           },
