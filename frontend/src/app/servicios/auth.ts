@@ -52,7 +52,7 @@ export class AuthService {
       this.cargandoGlobal.set(false);
       return;
     }
-
+    
     this.http.post<{usuario: UsuarioPublico}>(`${this.apiUrl}/auth/autorizar`, { token })
       .subscribe({
         next: (res) => {

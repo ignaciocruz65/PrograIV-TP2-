@@ -1,4 +1,4 @@
-import { Injectable,BadRequestException} from '@nestjs/common';
+import { Injectable,BadRequestException, NotFoundException, ForbiddenException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {Usuario } from './usuario.shema';
@@ -32,6 +32,7 @@ export class UsuariosService {
             passwordHash,
             fechaNacimiento: datos.fechaNacimiento,
             perfil: datos.perfil || 'usuario',
+            descripcionBreve: datos.descripcionBreve,
             activo: true
         };
 
@@ -44,11 +45,25 @@ export class UsuariosService {
     }
 
     async cambiarEstado(id: string, estado: boolean): Promise<UsuarioPublico> {
+        if (!estado) {
+            const usuario = await this.usuarioModel.findById(id).lean();
+            
+            if (!usuario) {
+                throw new NotFoundException('El usuario no existe');
+            }
+
+            if (usuario.perfil === 'administrador') {
+                throw new ForbiddenException('Operación denegada: No se puede deshabilitar a un administrador');
+            }
+        }
         const usuarioActualizado = await this.usuarioModel.findByIdAndUpdate(
             id, 
             { activo: estado }, 
             { new: true }
         ).lean();
+        if (!usuarioActualizado) {
+            throw new NotFoundException('Error al actualizar: Usuario no encontrado');
+        }
         return this.quitarContrasena(usuarioActualizado);
     }
 

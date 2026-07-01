@@ -3,11 +3,17 @@ import { HttpClient } from '@angular/common/http'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService } from '../../servicios/auth'
 import { CommonModule } from '@angular/common'
+import { FormatoLikesPipe } from '../../shared/pipes/formato-likes.pipe'
+import { FechaRelativaPipe } from '../../shared/pipes/fecha-relativa.pipe'
+import { LimpiarTextoPipe } from '../../shared/pipes/texto-seguro.pipe'
+import { ZoomHoverDirective } from '../../shared/directives/zoom-hover'
+import { IluminarInputDirective } from '../../shared/directives/iluminar-input'
+import { ModoFocusDirective } from '../../shared/directives/modo-focus'
 import Swal from 'sweetalert2'
 @Component({
     selector: 'app-pagina-pub',
     standalone: true,
-    imports: [RouterLink, CommonModule],
+    imports: [RouterLink, CommonModule, FormatoLikesPipe, FechaRelativaPipe, LimpiarTextoPipe, ZoomHoverDirective, IluminarInputDirective, ModoFocusDirective],
     templateUrl: './pagina-pub.html'
 })
 export class PaginaPublicacionComponent implements OnInit {
@@ -39,6 +45,10 @@ export class PaginaPublicacionComponent implements OnInit {
             this.cargarComentarios()
         }
 
+    }
+
+    get soyDuenio(): boolean {
+        return this.post() && this.post().usuarioId === this.authService.usuarioActual()?.id
     }
 
     // post principal

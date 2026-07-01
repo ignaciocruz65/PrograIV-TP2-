@@ -76,7 +76,7 @@ export class DashUsuariosComponent implements OnInit {
     if (this.formUsuario.invalid) return
 
     this.cargando.set(true);
-    const { repetirPassword, ...datosUsuario } = this.formUsuario.value;
+    const datosUsuario = this.formUsuario.value;
     this.servicioUsuarios.crear(datosUsuario).subscribe({
       next: () => {
         Swal.fire('Éxito', 'Usuario creado correctamente', 'success');
