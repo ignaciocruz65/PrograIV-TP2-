@@ -56,7 +56,7 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           this.usuarioActual.set(res.usuario);
-          this.iniciarTemporizador(); 
+          this.iniciarTemporizador(false); 
           this.cargandoGlobal.set(false);
         },
         error: () => {
